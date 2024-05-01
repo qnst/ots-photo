@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QN.Ots.Photo.Core.ServiceInterface</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>QN.Ots.Photo.Core.ServiceInterface</AssemblyName>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="QN.EDF.Framework" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Common" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Model" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Wechat" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Wechat.Model" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.BusinessEntity\Core.BusinessEntity.csproj" />
+  </ItemGroup>
+
+</Project>

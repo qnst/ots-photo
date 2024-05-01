@@ -1,0 +1,168 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.drawer_header {
+  border-bottom: ~'2rpx' solid #e4e4e4;
+}
+
+.content_view {
+  padding: 0 ~'30rpx';
+}
+
+.tips {
+  color: @color6;
+  font-size: ~'28rpx';
+  text-align: center;
+  > view {
+    padding: ~'30rpx' ~'60rpx';
+    border-bottom: ~'2rpx' solid #e4e4e4;
+  }
+}
+
+.picker_view {
+  width: 100%;
+  height: 300px;
+  text-align: center;
+  padding: 0 0 ~'20rpx';
+}
+</style>
+<template>
+  <drawer :open.sync="open">
+    <view class="drawer_header">
+      <text @tap="hideDrawer">取消</text>
+      <text>选择服务日期</text>
+      <text @tap="onDone">完成</text>
+    </view>
+    <view class="content_view">
+      <!-- <view class="tips">
+        <view>
+          因广告音频制作需要1-2天时间，最早播放时间不能早于{{enable_date}}日
+        </view>
+      </view>-->
+      <picker-view
+        indicator-style="height: 50px;"
+        class="picker_view"
+        value="{{values}}"
+        @change="dateChange"
+      >
+        <picker-view-column>
+          <view wx:for="{{years}}" wx:key="index" style="line-height: 50px">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{months}}" wx:key="index" style="line-height: 50px">{{item}}月</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{days}}" wx:key="index" style="line-height: 50px">{{item}}日</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+import dayjs from 'dayjs';
+
+const enable_date = dayjs().add(0, 'd').format('YYYY-MM-DD');
+const enable_year = dayjs(enable_date).year();
+const enable_month = dayjs(enable_date, { timeZone: 'Asia/Shanghai' }).month();
+const enable_day = dayjs(enable_date).date();
+var mck=parseInt(enable_month) < 10 ? '0' + (parseInt(enable_month)+1) : (parseInt(enable_month)+1);
+
+console.log('generate-day', enable_date, enable_year, enable_month, enable_day);
+
+const generateDay = (m_v, ds) => {
+  
+  var si=m_v==mck?enable_day:1;
+  console.log('-----------------------',m_v,mck,si);
+  let days = [];
+  for (let i = si; i <= ds; i++) {
+    days.push(i < 10 ? '0' + i : i);
+  }
+  return days;
+};
+
+const ds = dayjs(enable_date).daysInMonth();
+const years = [];
+const months = [];
+const days = generateDay(mck,ds);
+
+for (let i = enable_year; i <= enable_year + 1; i++) {
+  years.push(i);
+}
+
+for (let i = enable_month + 1; i <= 12; i++) {
+  months.push(i < 10 ? '0' + i : i);
+}
+
+export default class SelectDate extends wepy.component {
+  components = {
+    drawer
+  };
+  props = {
+    key: {
+      type: String
+    }
+  };
+  data = {
+    open: false,
+    years,
+    months,
+    days,
+    enable_date,
+    values: [0, 0, 0]
+  };
+
+  methods = {
+    hideDrawer() {
+      this.open = false;
+    },
+    showDrawer() {
+      this.open = true;
+      console.log(this.data);
+    },
+    onDone() {
+      const date_value = this.getValue(this.values);
+      if (date_value < enable_day) {
+        wx.showModal({
+          title: '提示',
+          content: '服务日期不能小于' + enable_day,
+          showCancel: false
+        });
+        return;
+      }
+      this.open = false;
+      this.$emit('dateDone', date_value, this.key);
+    },
+    dateChange(e) {
+      const value = e.detail.value;
+      this.updateDays(value);
+    }
+  };
+
+  getValue(value) {
+    const { years, months, days } = this;
+    const [y, m, d] = value;
+    const y_v = years[y];
+    const m_v = months[m];
+    const d_v = days[d];
+    return y_v + '-' + m_v + '-' + d_v;
+  }
+
+  updateDays(value) {
+    const { years, months } = this;
+    const [y, m] = value;
+    const y_v = years[y];
+    const m_v = months[m];
+    const ds = dayjs(y_v + '-' + m_v).daysInMonth();
+    this.days = generateDay(m_v,ds);
+    this.values = value;
+  }
+
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+}
+</script>

@@ -1,0 +1,80 @@
+<style lang="less" scoped>
+  @import "./animate";
+
+  .mask {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    line-height: 100vh;
+  }
+
+  .modal_wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    outline: 0;
+
+  }
+
+  .modal {
+    display: inline-block;
+    width: ~'586rpx';
+    background: #fff;
+    box-sizing: border-box;
+    padding: ~'60rpx';
+    vertical-align: middle;
+    border-radius: ~'10rpx';
+    text-align: center;
+    position: relative;
+    .close {
+      position: absolute;
+      top: ~'30rpx';
+      right: ~'30rpx';
+      line-height: 1;
+    }
+  }
+
+</style>
+<template>
+  <view wx:if="{{visible}}" class="mask {{visible?'fadeIn':'fadeOut'}}" @tap.stop="hideModal"></view>
+
+  <view wx:if="{{visible}}" class="modal_wrap">
+    <view class="modal {{visible?'zoomIn':'zoomOut'}}">
+      <view class="close" @tap.stop="hideModal">x</view>
+      <slot></slot>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class Iviewer extends wepy.component {
+
+    data = {
+      visible: false
+    };
+
+    methods = {
+      hideModal: () => {
+        this.visible = false;
+      },
+      showModal: () => {
+        this.visible = true;
+      }
+    };
+  }
+</script>

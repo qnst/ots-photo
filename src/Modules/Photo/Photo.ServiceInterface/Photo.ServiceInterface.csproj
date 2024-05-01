@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QN.Ots.Photo.Photo.ServiceInterface</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>QN.Ots.Photo.Photo.ServiceInterface</AssemblyName>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="QN.EDF.Framework" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Common" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Model" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Photo.BusinessEntity\Photo.BusinessEntity.csproj" />
+  </ItemGroup>
+
+</Project>

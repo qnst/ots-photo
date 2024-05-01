@@ -1,0 +1,47 @@
+export default {
+    'navBar.lang': 'Languages',
+    'layout.user.link.help': 'Help',
+    'layout.user.link.privacy': 'Privacy',
+    'layout.user.link.terms': 'Terms',
+    'app.copyright.produced': 'Produced by Ant Financial Experience Department',
+    'app.preview.down.block': 'Download this page to your local project',
+    'app.welcome.link.fetch-blocks': 'Get all block',
+    'app.welcome.link.block-list': 'Quickly build standard, pages based on `block` development',
+
+    'common.fields.name.id': 'Primary Key',
+    'common.fields.name.createdBy': 'Created By',
+    'common.fields.name.createdTime': 'Created Date',
+    'common.fields.name.lastUpdatedBy': 'Updated By',
+    'common.fields.name.lastUpdatedTime': 'Updated Date',
+    'common.fields.name.transactionId': 'Transaction No',
+
+    'common.fields.rule.search': 'Please input search content',
+
+    'common.fields.ph.id': 'Please fill in Primary Key field\'s value',
+    'common.fields.ph.createdBy': 'Please fill in Created By field\'s value',
+    'common.fields.ph.createdTime': 'Please fill in Created Date field\'s value',
+    'common.fields.ph.lastUpdatedBy': 'Please fill in Updated By field\'s value',
+    'common.fields.ph.lastUpdatedTime': 'Please fill in Updated Date field\'s value',
+    'common.fields.ph.transactionId': 'Please fill in Transaction No field\'s value',
+    'common.fields.ph.search': 'Please input search content',
+
+    'common.fields.tip.id': 'Primary Key',
+    'common.fields.tip.createdBy': 'Created By',
+    'common.fields.tip.createdTime': 'Created Date',
+    'common.fields.tip.lastUpdatedBy': 'Updated By',
+    'common.fields.tip.lastUpdatedTime': 'Updated Date',
+    'common.fields.tip.transactionId': 'Transaction No',
+
+    'common.fields.enum.dataStatus.valid': 'Normal',
+    'common.fields.enum.dataStatus.deleted': 'Deleted',
+
+    'common.opt.opt': 'Operate',
+    'common.opt.update': 'Edit',
+    'common.opt.detail': 'Detail',
+    'common.opt.delete': 'Delete',
+    'common.opt.export': 'Export',
+    'common.opt.copy': 'Copy Info',
+    'common.opt.other': 'Other Operate',
+    'common.opt.batchDeletion': 'Batch Deletion',
+    'common.opt.batchApproval': 'Batch Approval',
+}

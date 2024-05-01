@@ -1,0 +1,255 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.hour_item {
+  display: flex;
+  align-items: center;
+  margin-top: ~'30rpx';
+}
+
+.start,
+.end {
+  font-size: ~'26rpx';
+  text-align: center;
+  color: @color4;
+  flex: 1;
+  border: ~'2rpx' solid @color4;
+  line-height: 2;
+}
+
+.plus,
+.del {
+  width: ~'28rpx';
+  height: ~'28rpx';
+  margin-left: ~'40rpx';
+}
+
+.divider {
+  height: ~'30rpx';
+  width: ~'2rpx';
+  background: @color;
+  margin: 0 ~'50rpx';
+}
+
+.drawer_header {
+  border-bottom: ~'2rpx' solid #e4e4e4;
+}
+
+.picker_view {
+  width: 100%;
+  height: 300px;
+  text-align: center;
+}
+
+.indicator {
+  line-height: 50px;
+}
+
+.in_start,
+.in_end {
+  font-size: ~'26rpx';
+  text-align: center;
+  color: #ffffff;
+  flex: 1;
+  line-height: 2;
+  background: @color;
+}
+</style>
+<template>
+  <block wx:for="{{hours_arr}}" wx:key="index">
+    <view class="hour_item">
+      <view @tap="handPick('start', {{index}})" class="{{item.start ? 'in_start' : 'start'}}">
+        <view>从</view>
+        <view>
+          <text wx:if="{{item.start}}">{{item.start_value == 13 ? '上午' : '下午'}} {{item.start}}:00</text>
+          <text wx:else>开始时段</text>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view @tap="handPick('end',  {{index}})" class="{{item.end ? 'in_end' : 'end'}}">
+        <view>至</view>
+        <view>
+          <text wx:if="{{item.end}}">{{item.end_value == 13 ? '上午' : '下午'}} {{item.end}}:00</text>
+          <text wx:else>结束时段</text>
+        </view>
+      </view>
+      <image wx:if="{{hours_arr[index + 1]}}" @tap="handleDel({{index}})" class="del"
+             src="../../images/ic_del.png"/>
+      <image wx:else @tap="handleAdd" class="plus" src="../../images/ic_plus.png"/>
+    </view>
+
+    <drawer :open.sync="open">
+    <view class="drawer_header">
+      <text @tap="hideDrawer">取消</text>
+      <text>选择播放时段</text>
+      <text @tap="onDone">完成</text>
+    </view>
+
+    <view class="content_view">
+      <picker-view
+        class="picker_view"
+        indicator-style="height: 50px;"
+        @change="hourChange"
+        value="{{values}}"
+      >
+        <picker-view-column>
+          <view class="indicator">上午</view>
+          <view class="indicator">下午</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{hours}}" wx:key="index" class="indicator">{{item + 1}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="indicator">00</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+  </drawer>
+  </block>　
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+import { range, cloneDeep } from 'lodash';
+
+const hours = range(12);
+let hour_value = 1;
+let item_index = 0;
+let hour_type = 'AM';
+export default class HourRange extends wepy.component {
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    hours,
+    hours_arr: [
+      {
+        start: '',
+        end: ''
+      }
+    ],
+    type: 'start',
+    values: [0, 0, 0]
+  };
+  methods = {
+    hideDrawer() {
+      this.open = false;
+    },
+    handPick(type, index) {
+      // 控件回显
+      let current = this.hours_arr[index];
+      if (current[type]) {
+        let i_1 = current[type + '_value'] < 13 ? 0 : 1;
+        let i_2 = current[type] - 1;
+        this.values = [i_1, i_2, 0];
+        hour_value = current[type];
+        hour_type = i_1 === 0 ? 'AM' : 'PM';
+      } else {
+        hour_value = 1;
+        hour_type = 'AM';
+        this.values = [0, 0, 0];
+      }
+      this.open = true;
+      this.type = type;
+      item_index = index;
+      this.$apply();
+    },
+    onDone() {
+      let arr = cloneDeep(this.hours_arr);
+      let current = arr[item_index] || {};
+      const start_hour = current['start_value'];
+      const end_hour = current['end_value'];
+      const hr_24 = hour_type === 'AM' ? hour_value : hour_value + 12;
+      if (this.type === 'start') {
+        if (end_hour && end_hour < hr_24) {
+          wx.showToast({
+            title: '开始时间不大于结束时间哟',
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+        if (end_hour && end_hour === hr_24) {
+          wx.showToast({
+            title: '开始结束时间不能相同',
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+      }
+      if (this.type === 'end') {
+        if (start_hour && start_hour > hr_24) {
+          wx.showToast({
+            title: '结束时间不能小于开始时间哟',
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+        if (start_hour && start_hour === hr_24) {
+          wx.showToast({
+            title: '开始结束时间不能相同',
+            icon: 'none',
+            duration: 2000
+          });
+          return;
+        }
+      }
+      const is_repeat = arr.findIndex(item => {
+        if (!item.start_value && !item.end_value) {
+          return false;
+        }
+        return hr_24 >= item.start_value && hr_24 < item.end_value;
+      });
+      if (is_repeat > -1) {
+        wx.showToast({
+          title: '不可重复选择时段哟',
+          icon: 'none',
+          duration: 2000
+        });
+        return;
+      }
+      current[this.type] = hour_value;
+      current[this.type + '_value'] = hr_24;
+      arr[item_index] = current;
+      this.hours_arr = arr;
+      this.open = false;
+      // 转换接口数据
+      const all_hours = arr.reduce((sum, item) => {
+        if (item.start_value && item.end_value) {
+          const item_range = range(item.start_value, item.end_value);
+          return sum.concat(item_range);
+        }
+        return [];
+      }, []);
+      if (all_hours.length > 0) {
+        this.$emit('onHourSelect', all_hours.join(','));
+      }
+    },
+    hourChange(e) {
+      const value = e.detail.value;
+      hour_value = value[1] + 1;
+      hour_type = value[0] === 0 ? 'AM' : 'PM';
+    },
+    handleAdd() {
+      let arr = cloneDeep(this.hours_arr);
+      if (arr.length === 24) return;
+      arr.push({ start: '', end: '' });
+      this.hours_arr = arr;
+    },
+    handleDel(index) {
+      let arr = cloneDeep(this.hours_arr);
+      if (arr.length === 1) return;
+      arr.splice(index, 1);
+      this.hours_arr = arr;
+    }
+  };
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+}
+</script>

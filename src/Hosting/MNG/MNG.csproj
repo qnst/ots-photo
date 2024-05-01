@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>QN.Ots.Photo.MNG.Hosting</RootNamespace>
+    <AssemblyName>QN.Ots.Photo.MNG.Hosting</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="QN.EDF.Common" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Framework" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Model" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Wechat" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Wechat.Model" Version="2.0.0" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\1028\QN02\EDF\src\EDF\EDF-NET8\SourceCode\AspNet\AspNet\AspNet.csproj" />
+    <ProjectReference Include="..\..\Framework\Framework\Framework.csproj" />
+    <ProjectReference Include="..\..\Modules\Core\Core.BusinessEntity\Core.BusinessEntity.csproj" />
+    <ProjectReference Include="..\..\Modules\Core\Core.ServiceInterface\Core.ServiceInterface.csproj" />
+    <ProjectReference Include="..\..\Modules\Core\Core.Service\Core.Service.csproj" />
+    <ProjectReference Include="..\..\Modules\Photo\Photo.BusinessEntity\Photo.BusinessEntity.csproj" />
+    <ProjectReference Include="..\..\Modules\Photo\Photo.ServiceInterface\Photo.ServiceInterface.csproj" />
+    <ProjectReference Include="..\..\Modules\Photo\Photo.Service\Photo.Service.csproj" />
+  </ItemGroup>
+
+ 
+            <ItemGroup>
+                <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.Unity">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.Unity.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.Unity.Configuration">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.Unity.Interception">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.Unity.Interception.dll</HintPath>
+                </Reference>
+                <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
+                  <HintPath>..\..\..\lib\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+                </Reference>
+              </ItemGroup>
+
+ 
+            <ItemGroup>
+              <Folder Include="wwwroot\" />
+              <Folder Include="wwwroot\img\mng\" />
+            </ItemGroup> 
+
+</Project>

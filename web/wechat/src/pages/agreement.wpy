@@ -1,0 +1,29 @@
+<style lang="less" scoped>
+.agreement {
+  padding: ~'30rpx';
+  font-size: ~'28rpx';
+  line-height: 1.7;
+}
+</style>
+<template>
+  <view class="agreement">
+    <view>一、法律声明</view>
+    <view>1、欢迎您注册“儿童摄影”（由成都巧诺科技有限公司负责运营，以下简称：儿童摄影）。在您注册、使用儿童摄影服务之前，请您认真阅读《儿童摄影用户协议》（以下简称：本协议）。您选择并使用服务，即视为您已充分阅读并接受本协议的所有条款并且同意本协议对双方具有法律约束。</view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class Agreement extends wepy.page {
+  config = {
+    navigationBarTitleText: '用户协议'
+  };
+
+  onShareAppMessage() {
+    return {
+      title: '儿童摄影',
+      path: '/pages/main'
+    };
+  }
+}
+</script>

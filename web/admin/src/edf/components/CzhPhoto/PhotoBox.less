@@ -1,0 +1,25 @@
+.PhotoView {
+  &__PhotoWrap,
+  &__PhotoBox {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    touch-action: none;
+    direction: ltr;
+    
+    //2023-05-17 调整距离底部边距 60px, 60px为toolbar的高度
+    //margin-bottom: 60px;
+  }
+
+  &__PhotoWrap {
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  &__PhotoBox {
+    transform-origin: left top;
+  }
+}

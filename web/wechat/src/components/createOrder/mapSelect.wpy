@@ -1,0 +1,150 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.map_view {
+  height: ~'500rpx';
+  map {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.content {
+  position: relative;
+}
+
+.control {
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ~'34rpx' ~'30rpx';
+  font-size: ~'32rpx';
+  box-sizing: border-box;
+  > view {
+    display: flex;
+    align-items: center;
+  }
+  image {
+    width: ~'44rpx';
+    height: ~'44rpx';
+  }
+  .km {
+    margin: 0 ~'60rpx';
+  }
+}
+</style>
+<template>
+  <drawer :open.sync="open">
+    <view class="drawer_header">
+      <text @tap="hideDrawer">取消</text>
+      <text>附近</text>
+      <text @tap="onDone">完成</text>
+    </view>
+    <view class="content">
+      <view class="map_view">
+        <map
+          class="map_view"
+          id="map"
+          scale="{{15}}"
+          longitude="{{longitude}}"
+          latitude="{{latitude}}"
+          markers="{{markers}}"
+          circles="{{circle}}"
+          include-points="{{markers}}"
+          show-location
+        ></map>
+      </view>
+      <view class="control">
+        <text>附近半径范围</text>
+        <view>
+          <image @tap="onMinus" src="../../images/minus.png"/>
+          <text class="km">{{km}}km</text>
+          <image @tap="onPlus" src="../../images/plus.png"/>
+        </view>
+      </view>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+
+export default class MapSelect extends wepy.component {
+  props = {
+    markers: {
+      type: Array,
+      default: []
+    }
+  };
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    latitude: '',
+    longitude: '',
+    km: 1
+  };
+  computed = {
+    circle() {
+      return [
+        {
+          fillColor: '#7cb5ec88',
+          latitude: this.latitude,
+          longitude: this.longitude,
+          radius: this.km * 1000
+        }
+      ];
+    }
+  };
+  methods = {
+    hideDrawer() {
+      this.open = false;
+    },
+    showDrawer() {
+      this.open = true;
+      this.getMarkers();
+    },
+    onMinus() {
+      const { km } = this;
+      if (km === 1) return;
+      this.km = km - 1;
+      this.getMarkers();
+    },
+    onPlus() {
+      const { km } = this;
+      if (km > 9) return;
+      this.km = km + 1;
+      this.getMarkers();
+    },
+    onDone() {
+      this.open = false;
+      this.$emit('mapDone');
+    }
+  };
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  getMarkers = () => {
+    const { km, latitude, longitude } = this;
+    this.$emit('mapChange', { step_km_len: km, latitude, longitude });
+  };
+
+  onLoad() {
+    // 获取位置
+    wepy.getLocation({
+      type: 'gcj02',
+      success: res => {
+        this.latitude = res.latitude;
+        this.longitude = res.longitude;
+      },
+      fail: () => {
+        wx.redirectTo({ url: 'local' });
+      }
+    });
+  }
+}
+</script>

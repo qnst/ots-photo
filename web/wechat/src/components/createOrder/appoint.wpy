@@ -1,0 +1,481 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.content {
+  padding: ~'10rpx';
+  border-top: ~'2rpx' solid #e4e4e4;
+}
+
+.input_wrap {
+  display: flex;
+  align-items: center;
+  border: ~'2rpx' solid rgba(@color4);
+  border-radius: ~'6rpx';
+  input {
+    font-size: ~'32rpx';
+    height: ~'92rpx';
+    line-height: ~'92rpx';
+    flex: 1;
+  }
+  image {
+    margin: 0 ~'30rpx';
+  }
+  .search {
+    width: ~'34rpx';
+    height: ~'37rpx';
+  }
+  .close {
+    width: ~'34rpx';
+    height: ~'34rpx';
+  }
+}
+
+.store_list {
+  height: ~'500rpx';
+  white-space: nowrap;
+  .store_item {
+    padding: ~'30rpx';
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    &:not(:last-child) {
+      border-bottom: ~'2rpx' solid #e4e4e4;
+    }
+    image {
+      width: ~'44rpx';
+      height: ~'44rpx';
+    }
+  }
+  .item_content {
+    flex: 1;
+    overflow: hidden;
+    .name {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      color: @color;
+    }
+    .name1 {
+      font-size: ~'32rpx';
+      color: @color;
+    }
+    .address {
+      font-size: ~'28rpx';
+      color: @color6;
+      margin-top: ~'30rpx';
+    }
+  }
+
+  .store_item2 {
+    padding: ~'10rpx';
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    &:not(:last-child) {
+      border-bottom: ~'2rpx' solid #e4e4e4;
+    }
+    image {
+      width: ~'44rpx';
+      height: ~'44rpx';
+    }
+  }
+
+  .item_content2 {
+    flex: 1;
+    overflow: hidden;
+    margin: ~'10rpx' 0;
+    .name {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      color: @color;
+    }
+    .name1 {
+      font-size: ~'32rpx';
+      color: @color;
+    }
+    .address {
+      font-size: ~'28rpx';
+      color: @color6;
+      margin-top: ~'30rpx';
+    }
+
+    .kfs {
+      // text-align: center;
+      // margin-top: ~'10rpx';
+      // font-size: ~'30rpx';
+      margin-left: ~'20rpx';
+      font-size: ~'30rpx';
+    }
+
+    .priceView {
+      margin-top: ~'15rpx';
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: ~'35rpx';
+      color: #ff6a00;
+      margin-left: ~'0rpx';
+    }
+
+    .jg {
+      font-size: ~'30rpx';
+      margin-left: ~'20rpx';
+    }
+
+    .chkimg {
+      float: right;
+      z-index: 99999;
+      margin-top: ~'-40rpx';
+    }
+  }
+}
+
+.checked_wrap {
+  position: relative;
+  height: ~'120rpx';
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: ~'2rpx' solid #e4e4e4;
+  white-space: nowrap;
+  background: #ffffff;
+  .bottom_scroll {
+    padding: ~'18rpx' 0 ~'18rpx' ~'30rpx';
+    width: 100%;
+  }
+  .store_tag {
+    height: ~'100rpx';
+    margin-top: ~'10rpx';
+    // background: @color;
+    // padding: ~'16rpx' ~'30rpx';
+    // border-radius: ~'4rpx';
+    // font-size: ~'26rpx';
+    // line-height: 1;
+    // color: #ffffff;
+    // display: inline-block;
+    // position: relative;
+    // margin: 0 ~'10rpx';
+    // image {
+    //   width: ~'18rpx';
+    //   height: ~'18rpx';
+    //   margin-left: ~'20rpx';
+    // }
+  }
+}
+
+.divider {
+  display: block;
+  height: ~'2rpx';
+  width: 100%;
+  background: #f3f3f3;
+  margin: ~'20rpx' 0;
+}
+> .label {
+  color: rgba(@color, 0.6);
+}
+
+.kfs1 {
+  margin-left: ~'20rpx';
+  font-size: ~'30rpx';
+}
+
+.priceView1 {
+  margin-top: ~'5rpx';
+}
+
+.price1 {
+  font-weight: bold;
+  font-size: ~'35rpx';
+  color: #ff6a00;
+  margin-left: ~'0rpx';
+}
+
+.jg1 {
+  font-size: ~'30rpx';
+  margin-left: ~'20rpx';
+}
+
+.chkimg1 {
+  float: left;
+  z-index: 99999;
+  margin-top: ~'30rpx';
+  margin-left: ~'20rpx';
+  margin-right: ~'40rpx';
+  width: ~'60rpx';
+  height: ~'60rpx';
+}
+
+.imm1 {
+  width: 40px;
+  height: 40px;
+  border-radius: 10rpx;
+  float: left;
+  margin-top: ~'10rpx';
+  margin-bottom: ~'5rpx';
+}
+
+.imx2 {
+  float: right;
+  width: ~'50rpx';
+  height: ~'50rpx';
+
+  z-index: 890;
+  margin-top: ~'-70rpx';
+  margin-right: ~'50rpx';
+}
+</style>
+<template>
+  <drawer :open.sync="open">
+    <view class="drawer_header">
+      <text @tap="hideDrawer">取消</text>
+      <text>套系列表</text>
+      <text @tap="onDone">完成</text>
+    </view>
+    <view class="content">
+      <scroll-view scroll-y class="store_list">
+        <block wx:for="{{result}}" wx:key="idx1" wx:for-item="item1">
+          <view class="store_item">
+            <view class="item_content">
+              <view class="name">{{item1.name}}</view>
+              <view class="divider"></view>
+              <block wx:for="{{item1.sub}}" wx:key="idx2" wx:for-item="item2">
+                <view class="store_item2" @tap="onSelect({{item2}})">
+                  <view class="item_content2">
+                    <view style="margin-right:10rpx">
+                      <image
+                        mode="scaleToFill"
+                        src="{{ item2.path }}"
+                        style="width: 40px;height: 40px;border-radius: 10rpx;float:left"
+                      />
+                      <view>
+                        <text class="kfs">{{ item2.name }}</text>
+                      </view>
+                      <view class="priceView">
+                        <text class="jg">价格：</text>
+                        <text class="price">￥{{ item2.price }}</text>
+                      </view>
+                      <image
+                        wx:if="{{item2.isChecked}}"
+                        class="chkimg"
+                        src="../../images/done_green.png"
+                      />
+                    </view>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+    <view wx:if="{{checked.length > 0}}" class="checked_wrap">
+      <block wx:for="{{checked}}" wx:key="index">
+        <view class="store_tag">
+          <view style="float:left">
+            <image class="chkimg1" src="../../images/done_green.png" />
+          </view>
+          <view style="margin-right:10rpx">
+            <image mode="scaleToFill" src="{{ item.path }}" class="imm1" />
+            <view>
+              <text class="kfs1">{{ item.name }}</text>
+            </view>
+            <view class="priceView1">
+              <text class="jg1">价格：</text>
+              <text class="price1">￥{{ item.price }}</text>
+            </view>
+          </view>
+          <image class="imx2" src="../../images/close_f.png" @tap="onDelCheck({{item}}, {{index}})" />
+        </view>
+      </block>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+
+export default class Appoint extends wepy.component {
+  props = {
+    datasource: {
+      type: Array,
+      default: []
+    }
+  };
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    inputKey: '',
+    result: [],
+    checked: []
+    // tmpChecked:[],
+  };
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  onLoad() {}
+
+  methods = {
+    onInit() {
+      console.log('appoint-wpy on init2', this.datasource);
+
+      var rst = this.datasource.map(item => {
+        if (item.sub != null) {
+          var nsub = item.sub.map(subItm => {
+            var newSubItem = {
+              id: subItm.id,
+              name: subItm.name,
+              path:
+                subItm.images != null && subItm.images.length > 0
+                  ? subItm.images[0].path
+                  : '',
+              price: subItm.price,
+              isChecked: this.checked.findIndex(c => c.id === subItm.id) > -1
+            };
+
+            return newSubItem;
+          });
+        }
+
+        var newItm = {
+          id: item.id,
+          name: item.name,
+          sub: nsub
+        };
+        return newItm;
+      });
+
+      this.result = rst;
+      console.log('the onfffffffffffffffffff', this.result);
+    },
+
+    hideDrawer() {
+      this.open = false;
+    },
+    showDrawer() {
+      this.open = true;
+    },
+
+    test() {},
+
+    onDone() {
+      const no_list = this.checked;
+      if (no_list.length === 0) {
+        wx.showModal({
+          title: '提示',
+          content: '请选择预约套系！',
+          showCancel: false
+        });
+      } else {
+        this.open = false;
+      }
+      this.$emit('onAppointDone', no_list);
+    },
+    onSearch(e) {
+      const key = e.detail.value;
+      this.inputKey = key;
+      this.result = this.datasource.map(item => ({
+        id: item.id,
+        name: item.name,
+        store_no: item.name,
+        times: 1,
+        address:
+          item.province +
+          ' ' +
+          item.city +
+          ' ' +
+          item.area +
+          ' ' +
+          item.country +
+          ' ' +
+          item.address_extral,
+        isChecked: this.checked.findIndex(c => c.id === item.id) > -1
+      }));
+    },
+
+    // onSelect(item) {
+    //   const { id } = item;
+    //   let arr = [...this.checked];
+    //  arr=new Array(item);
+    //  this.checked = arr;
+    //   this.result = this.result.map(e => {
+    //     if (e.id === id) {
+
+    //       return { ...e, isChecked:e.isChecked?false: true };
+    //     }
+    //     else{
+    //        return { ...e, isChecked:false };
+    //     }
+    //   });
+    // },
+    // onDelCheck(item, i) {
+    //   const { id } = item;
+    //   const arr = [...this.checked];
+    //   arr.splice(i, 1);
+    //   this.checked = arr;
+    //   this.result = this.result.map(e => {
+    //     if (e.id === id) {
+    //       return { ...e, isChecked: false };
+    //     }
+    //     return e;
+    //   });
+    // },
+    // onClear() {
+    //   this.inputKey = '';
+    // },
+
+    onSelect(item) {
+      //清空所有的选择，单选
+      this.checked = [];
+      this.result = this.result.map(e => {
+        e.sub.map(itx => {
+          itx.isChecked = false;
+        });
+        return e;
+      });
+
+      const { id } = item;
+      const arr = [...this.checked];
+      const isContains = arr.findIndex(c => c.id === item.id) > -1;
+
+      if (!isContains) {
+        arr.push(item);
+      }
+
+      this.checked = arr;
+
+      this.result = this.result.map(e => {
+        e.sub.map(itx => {
+          if (itx.id === id) {
+            // return { ...itx, isChecked: true };
+            itx.isChecked = true;
+          }
+        });
+
+        return e;
+      });
+    },
+    onDelCheck(item, i) {
+      const { id } = item;
+      const arr = [...this.checked];
+      arr.splice(i, 1);
+      this.checked = arr;
+      this.result = this.result.map(e => {
+        e.sub.map(itx => {
+          if (itx.id === id) {
+            // return { ...itx, isChecked: true };
+            itx.isChecked = false;
+          }
+        });
+        return e;
+      });
+    },
+    onClear() {
+      this.inputKey = '';
+    }
+  };
+}
+</script>

@@ -1,0 +1,170 @@
+<style lang="less" scoped>
+  @import "../../common/index";
+
+  @keyframes slideInUp {
+    from {
+      transform: translate3d(0, 100%, 0);
+      visibility: visible;
+      opacity: 0;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  .list_wrap {
+    opacity: 0;
+    animation: slideInUp .5s ease-out .6s forwards;
+  }
+
+  .list_item {
+    .base_card;
+    &:not(:first-child) {
+      margin-top: ~'2rpx';
+    }
+    > .item_title {
+      font-weight: bold;
+      font-size: ~'32rpx';
+      margin-bottom: ~'40rpx';
+    }
+    > .item_name {
+      display: flex;
+      align-items: flex-start;
+      image {
+        margin-right: ~'20rpx';
+        width: ~'44rpx';
+        height: ~'44rpx';
+      }
+      .name_text {
+        color: @color;
+        font-size: ~'32rpx';
+      }
+      .second_text {
+        color: rgba(@color, .6);
+        font-size: ~'28rpx';
+        margin-top: ~'10rpx'
+      }
+    }
+  }
+
+  .count_box {
+    > view {
+      display: inline-block;
+      padding-left: ~'43rpx';
+      width: 50%;
+      box-sizing: border-box;
+      margin-top: ~'40rpx';
+      > text {
+        font-size: ~'32rpx';
+        font-weight: bold;
+      }
+      > view {
+        font-size: ~'24rpx';
+        color: rgba(@color, .6);
+        margin-top: ~'20rpx';
+      }
+    }
+  }
+
+  .valid {
+    color: #1DAB5F;
+  }
+
+  .invalid {
+    color: #F7B500;
+  }
+
+  .spending {
+    color: #0091FF;
+  }
+
+  .residue {
+    color: #2B60FC;
+  }
+</style>
+<template>
+  <view class="list_wrap">
+    <block wx:for="{{list}}" wx:key="index">
+      <view class="list_item" @tap="toDetail({{item.id}})">
+        <view class="item_title">投放中</view>
+        <view class="item_name">
+          <image @tap="audioControl({{index}})" wx:if="{{item.isPlay}}" src="../../images/pause.png"></image>
+          <image @tap="audioControl({{index}})" wx:else src="../../images/play.png"></image>
+          <view>
+            <view class="name_text">{{item.title}}</view>
+            <text class="second_text">{{item.len}}秒</text>
+          </view>
+        </view>
+
+        <view class="count_box">
+          <view>
+            <text class="valid">{{item.useful_times}}</text>
+            <view>有效播放（次）</view>
+          </view>
+          <view>
+            <text class="invalid">{{item.useless_times}}</text>
+            <view>无效播放（次）</view>
+          </view>
+          <view>
+            <text class="spending">{{item.total_consume}}</text>
+            <view>已支出金额（元）</view>
+          </view>
+          <view>
+            <text class="residue">{{item.total_surplus}}</text>
+            <view>剩余金额（元）</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  const innerAudioContext = wx.createInnerAudioContext();
+
+  export default class BottomList extends wepy.component {
+    props = {
+      list: {
+        type: Array,
+        default: []
+      }
+    };
+    methods = {
+      audioControl(i) {
+        const arr = [...this.list];
+        const item = arr[i];
+        const { url, isPlay, id } = item;
+        if (isPlay) {
+          innerAudioContext.pause();
+        } else {
+          innerAudioContext.src = url;
+          innerAudioContext.play();
+        }
+        this.list = arr.map(item => {
+          if (item.id === id) {
+            return { ...item, isPlay: !isPlay };
+          }
+          return { ...item, isPlay: false };
+        });
+        this.$apply();
+      },
+      toDetail(id) {
+        wx.navigateTo({ url: 'playCount?id=' + id });
+      }
+    };
+
+    onLoad() {
+      innerAudioContext.onPause(() => {
+        this.list = this.list.map(item => ({ ...item, isPlay: false }));
+        this.$apply();
+      });
+      innerAudioContext.onEnded(() => {
+        this.list = this.list.map(item => ({ ...item, isPlay: false }));
+        this.$apply();
+      });
+    }
+  }
+</script>

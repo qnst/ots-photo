@@ -1,0 +1,116 @@
+<style lang="less" scoped>
+@import '../common/index';
+
+.auth {
+  text-align: center;
+  overflow: hidden;
+  padding: 0 ~'56rpx';
+  line-height: 1;
+  .logo {
+    margin-top: ~'120rpx';
+    image {
+      width: ~'200rpx';
+      height: ~'200rpx';
+    }
+  }
+  .title {
+    font-size: ~'48rpx';
+    margin-top: ~'30rpx';
+  }
+  .tips {
+    font-size: ~'28rpx';
+    color: @color6;
+    margin-top: ~'60rpx';
+  }
+  .btn_wrap {
+    margin-top: ~'80rpx';
+    button {
+      .base_btn;
+    }
+  }
+  .agreement {
+    margin-top: ~'40rpx';
+    font-size: ~'24rpx';
+    color: @color6;
+    > navigator {
+      display: inline-block;
+      color: @color;
+    }
+  }
+}
+</style>
+<template>
+  <view class="auth">
+    <view class="logo">
+      <image src="../images/logo1.png" />
+    </view>
+    <view class="title">儿童摄影</view>
+    <view class="tips">请先授权登录后才能继续使用儿童摄影小程序</view>
+    <view class="btn_wrap">
+      <button open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo">授权登录</button>
+    </view>
+    <view class="agreement">
+      确认授权登录即表示您同意
+      <navigator url="/pages/agreement">
+        <text>《儿童摄影用户协议》</text>
+      </navigator>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import HTTP from '../utils/http';
+
+export default class Auth extends wepy.page {
+  config = {
+    navigationBarTitleText: '授权登录'
+  };
+  methods = {
+    onGotUserInfo: e => {
+      this.toLogin();
+    }
+  };
+  toLogin = () => {
+    wepy.login({
+      success: res => {
+        if (res.code) {
+          this.getUserInfo(res.code);
+        }
+      }
+    });
+  };
+  getUserInfo = code => {
+    wepy.getUserInfo({
+      withCredentials: true,
+      success: res => {
+        //console.log('auth--------------get user info', res);
+        this.$parent.globalData.userInfo = res.userInfo;
+        const payload = {
+          code,
+          encryptedData: res.encryptedData,
+          iv: res.iv
+        };
+        this.getSkey(payload);
+      }
+    });
+  };
+  getSkey = payload => {
+    HTTP.post({
+      url: '/wx/wechat-authorize',
+      params: payload
+    }).then(res => {
+      if (res.success) {
+        wx.setStorage({
+          key: 'skey',
+          data: res.data
+        });
+        wx.navigateBack({
+          delta: 1
+        });
+      }
+    });
+  };
+
+  onLoad() {}
+}
+</script>

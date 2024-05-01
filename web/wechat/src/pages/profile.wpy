@@ -1,0 +1,533 @@
+<style lang="less" scoped>
+@import '../common/index';
+
+.profile {
+  .base_bg;
+  padding-top: ~'30rpx';
+  padding: ~'0rpx' ~'15rpx' ~'30rpx';
+  .info {
+    .base_card;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    .login {
+      font-size: ~'36rpx';
+    }
+    .to_login {
+      font-size: ~'28rpx';
+      color: @color4;
+      margin-top: ~'30rpx';
+      image {
+        width: ~'18rpx';
+        height: ~'18rpx';
+        margin-left: ~'14rpx';
+      }
+      navigator {
+        display: inline-block;
+      }
+    }
+    > .nick {
+      flex: 1;
+    }
+    > .u_ava {
+      width: ~'140rpx';
+      height: ~'140rpx';
+      border-radius: ~'140rpx';
+      overflow: hidden;
+      open-data {
+        width: 100%;
+        height: 100%;
+      }
+      image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+  }
+  .menu {
+    .base_card;
+    padding: 0 ~'30rpx';
+    margin-top: ~'30rpx';
+    .menu_item {
+      display: flex;
+      align-items: center;
+      padding: ~'30rpx' 0;
+      justify-content: space-between;
+      font-size: ~'32rpx';
+      color: @color;
+    }
+    .item_left {
+      > image {
+        margin-right: ~'20rpx';
+      }
+    }
+    .wallet,
+    .service,
+    .phone {
+      width: ~'30rpx';
+      height: ~'30rpx';
+    }
+    .to_right {
+      width: ~'16rpx';
+      height: ~'30rpx';
+      margin-left: ~'20rpx';
+    }
+  }
+  .divider {
+    width: 100%;
+    height: ~'2rpx';
+    background: #e4e4e4;
+  }
+  .contact,
+  .phone_btn {
+    font-size: ~'32rpx';
+    color: @color;
+    display: flex;
+    border: none;
+    align-items: center;
+    line-height: 1;
+    padding: ~'30rpx' 0;
+    justify-content: space-between;
+  }
+}
+
+.official_wrap {
+  padding: ~'30rpx' 0;
+}
+
+.official {
+  width: 100%;
+}
+
+.phone_wrap {
+  display: flex;
+  align-items: center;
+  text {
+    color: @color4;
+  }
+}
+
+.banner {
+  width: 100%;
+  display: block;
+  height: ~'400rpx';
+}
+
+.top {
+  .base_card;
+  animation: slideInUp 0s ease-out forwards;
+  opacity: 0;
+
+  > .title {
+    font-size: ~'36rpx';
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: ~'40rpx';
+  }
+}
+
+.btn {
+  width: ~'400rpx';
+  font-size: ~'36rpx';
+  height: ~'94rpx';
+  background-color: #242a3a;
+  color: #ffffff;
+  margin: ~'40rpx' auto;
+}
+
+.step {
+  font-size: ~'28rpx';
+  color: rgba(#242a3a, 0.6);
+  align-items: center;
+
+  image {
+    width: ~'22rpx';
+    height: ~'12rpx';
+  }
+}
+
+.content {
+  padding: ~'20rpx';
+}
+
+.rule {
+  text-align: center;
+  font-size: ~'30rpx';
+  color: rgba(#242a3a, 0.6);
+
+  navigator {
+    display: inline-block;
+  }
+}
+
+.flex-wrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.middle {
+  .base_card;
+  opacity: 0;
+  animation: slideInUp 0s ease-out 0.3s forwards;
+  margin: ~'20rpx' 0;
+
+  .title {
+    display: flex;
+    align-items: left;
+    font-weight: bold;
+    margin-bottom: ~'35rpx';
+
+    .left {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .right {
+      font-size: ~'24rpx';
+      color: rgba(#242a3a, 0.6);
+    }
+  }
+}
+
+.middle2 {
+  .base_card;
+  opacity: 0;
+  animation: slideInUp 0s ease-out 0.3s forwards;
+  margin: ~'20rpx' 0;
+
+  .title {
+    display: flex;
+    align-items: left;
+    font-weight: bold;
+    margin-bottom: ~'35rpx';
+    font-size: ~'28rpx';
+    color: #9e9c9c;
+    .left {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .right {
+      font-size: ~'28rpx';
+      color: rgba(#242a3a, 0.6);
+    }
+  }
+
+  .title22 {
+    color: #9e9c9c;
+    font-size: ~'28rpx';
+  }
+}
+
+.banner_wrap {
+  position: relative;
+}
+
+.btn_hover {
+  background: @color6;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes floatAni {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, 23%, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.body {
+  background: #f3f3f3;
+  min-height: 100vh;
+}
+
+.content_body {
+  padding-top: ~'15rpx';
+  line-height: 1;
+}
+
+.clsswip {
+  padding: ~'15rpx';
+}
+
+.swiper-item {
+  width: 100%;
+  // background: red;
+  border-radius: ~'10rpx';
+
+  image {
+    width: ~'100%';
+    // height: ~'12rpx';
+    border-radius: ~'10rpx';
+  }
+}
+
+.t3 {
+  width: 100%;
+  height: 140px;
+}
+
+.t31 {
+  width: 33%;
+  height: 120px;
+}
+
+.kfs {
+  text-align: center;
+  margin-top: 10rpx;
+  font-size: 14px;
+}
+
+.smTxt {
+  font-size: ~'30rpx';
+}
+
+.smTxt2 {
+  font-size: ~'35rpx';
+}
+</style>
+<template>
+  <view class="profile">
+    <view class="info" @tap="checkLogin">
+      <view class="nick">
+        <view class="login">
+          <open-data wx:if="{{u_id}}" type="userNickName"></open-data>
+          <text wx:else>点击登录</text>
+        </view>
+        <view class="to_login">
+          <text wx:if="{{u_id}}">ID：{{ u_id }}</text>
+          <view wx:else>
+            <text>点击登录</text>
+            <image src="../images/triangle.png" />
+          </view>
+        </view>
+      </view>
+      <view class="u_ava">
+        <open-data wx:if="{{u_id}}" type="userAvatarUrl"></open-data>
+        <image wx:else src="../images/default_avatar.png" />
+      </view>
+    </view>
+
+    <view class="menu">
+      <view class="divider"></view>
+      <button
+        wx:if="{{u_id}}"
+        @getphonenumber="getphonenumber"
+        plain="{{true}}"
+        class="phone_btn"
+        open-type="getPhoneNumber"
+      >
+        <view class="item_left">
+          <image class="phone" src="../images/phone.png" />
+          <text>{{ phone ? '更换手机号' : '绑定手机号' }}</text>
+        </view>
+        <view class="phone_wrap">
+          <text>{{ phone }}</text>
+          <image class="to_right" src="../images/to_right.png" />
+        </view>
+      </button>
+      <view wx:else class="menu_item" @tap="checkLogin">
+        <view class="item_left">
+          <image class="phone" src="../images/phone.png" />
+          <text>绑定手机号</text>
+        </view>
+        <image class="to_right" src="../images/to_right.png" />
+      </view>
+    </view>
+    <view class="content_body">
+      <view class="middle">
+        <view class="title">
+          <text>客服&流程</text>
+        </view>
+      </view>
+      <view class="top">
+        <view class="title">
+          <text class="smTxt">客服</text>
+        </view>
+        <view style="margin-bottom: 10rpx">
+          <text class="smTxt2">客服微信号：130998987374</text>
+        </view>
+        <view style="margin-bottom: 10rpx">
+          <text class="smTxt2">客服QQ:8978878</text>
+        </view>
+        <view style="margin-bottom: 10rpx">
+          <text class="smTxt2">客服二维码：</text>
+        </view>
+      </view>
+      <view class="middle">
+        <view class="title">
+          <text class="smTxt">拍照流程</text>
+        </view>
+        <view class="smTxt2">电话预定，约定时间、现场选择套餐、拍摄、制作</view>
+      </view>
+      <view class="middle">
+        <view class="title">
+          <text class="smTxt">地址</text>
+        </view>
+        <view class="smTxt2">海南省海口市XX路XX号</view>
+      </view>
+      <view class="middle">
+        <view class="title">
+          <text class="smTxt">注意事项</text>
+        </view>
+        <view class="smTxt2">所有套餐均提供服装，也可以自带服装</view>
+      </view>
+      <view class="middle">
+        <view class="title">
+          <text class="smTxt">关于我们</text>
+        </view>
+        <view class="smTxt2">我们是一家专门重试摄影的门店，XXXX</view>
+      </view>
+      <view class="middle2">
+        <view class="title"></view>
+        <view class="title22">技术支持：成都巧诺科技有限公司 | 524782413</view>
+      </view>
+    </view>
+    <view class="official_wrap">
+      <official-account class="official"></official-account>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import HTTP from '../utils/http';
+
+export default class Profile extends wepy.page {
+  constructor() {
+    super();
+  }
+
+  config = {
+    navigationBarTitleText: '儿童摄影'
+  };
+  data = {
+    u_id: '',
+    phone: '',
+    userId: ''
+  };
+  computed = {};
+  methods = {
+    toWallet() {
+      if (!this.u_id) {
+        wx.navigateTo({ url: 'auth' });
+      } else {
+        wx.navigateTo({ url: 'wallet' });
+      }
+    },
+    checkLogin() {
+      if (!this.u_id) {
+        wx.navigateTo({ url: 'auth' });
+      }
+    },
+    getphonenumber(e) {
+      // console.log('getphonenumber', e);
+      const { iv, errMsg, encryptedData } = e.detail;
+      if (errMsg === 'getPhoneNumber:ok') {
+        wx.checkSession({
+          success: () => {
+            // session_key 未过期，并且在本生命周期一直有效
+            this.postPhone({
+              iv,
+              encryptedData,
+              agentId: this.userId
+            });
+          },
+          fail: () => {
+            // session_key 已经失效，需要重新执行登录流程
+            wx.login({
+              success: res => {
+                if (res.code) {
+                  this.postPhone({
+                    code: res.code,
+                    iv,
+                    encryptedData,
+                    agentId: this.userId
+                  });
+                }
+              },
+              fail: () => {}
+            });
+          }
+        });
+      }
+    }
+  };
+  getUserDetail = (par = {}) => {
+    HTTP.get({
+      url: '/core/current-edf-api-user',
+      loading: false,
+      ...par
+    })
+      .then(res => {
+        // console.log('get user detail', res);
+        if (res.success) {
+          this.u_id = res.data.name;
+          this.userId = res.data.id;
+          if (res.data.phone) {
+            this.phone = res.data.phone.replace(
+              /(\d{3})\d{4}(\d{4})/,
+              '$1****$2'
+            );
+          }
+          this.$apply();
+        } else {
+          this.u_id = '';
+          this.userId = '';
+          this.$apply();
+        }
+      })
+      .catch(err => {});
+  };
+  // send phone
+  postPhone = params => {
+    HTTP.post({
+      url: '/wx/bind-phone',
+      params
+    })
+      .then(res => {
+        if (res.success) {
+          wx.showToast({
+            title: '绑定成功',
+            icon: 'success',
+            duration: 2000
+          });
+          this.getUserDetail({ loading: false });
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.msg,
+            showCancel: false
+          });
+        }
+      })
+      .catch(err => {});
+  };
+
+  onShow() {
+    this.getUserDetail();
+  }
+
+  onLoad() {}
+}
+</script>

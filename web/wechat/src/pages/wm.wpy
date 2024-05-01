@@ -1,0 +1,405 @@
+<style lang="less">
+@import '../common/index';
+
+.banner {
+  width: 100%;
+  display: block;
+  height: ~'400rpx';
+}
+
+.top {
+  .base_card;
+  animation: slideInUp 0s ease-out forwards;
+  opacity: 0;
+
+  > .title {
+    font-size: ~'36rpx';
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: ~'40rpx';
+  }
+}
+
+.btn {
+  width: ~'400rpx';
+  font-size: ~'36rpx';
+  height: ~'94rpx';
+  background-color: #242a3a;
+  color: #ffffff;
+  margin: ~'40rpx' auto;
+}
+
+.step {
+  font-size: ~'28rpx';
+  color: rgba(#242a3a, 0.6);
+  align-items: center;
+
+  image {
+    width: ~'22rpx';
+    height: ~'12rpx';
+  }
+}
+
+.content {
+  padding: ~'20rpx';
+}
+
+.rule {
+  text-align: center;
+  font-size: ~'30rpx';
+  color: rgba(#242a3a, 0.6);
+
+  navigator {
+    display: inline-block;
+  }
+}
+
+.flex-wrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.middle {
+  .base_card;
+  opacity: 0;
+  animation: slideInUp 0s ease-out 0.3s forwards;
+  margin: ~'20rpx' 0;
+
+  .title {
+    display: flex;
+    align-items: left;
+    margin-bottom: ~'35rpx';
+
+    .left {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .right {
+      font-size: ~'24rpx';
+      color: rgba(#242a3a, 0.6);
+    }
+  }
+}
+
+.banner_wrap {
+  position: relative;
+}
+
+.bubble1 {
+  position: absolute;
+  top: ~'168rpx';
+  right: ~'50rpx';
+  width: ~'50rpx';
+  height: ~'50rpx';
+  animation: floatAni 3s ease-in-out infinite;
+}
+
+.bubble2 {
+  position: absolute;
+  bottom: ~'120rpx';
+  right: ~'266rpx';
+  width: ~'50rpx';
+  height: ~'50rpx';
+  animation: floatAni 3s 0s ease-in-out infinite;
+}
+
+.bubble3 {
+  position: absolute;
+  bottom: ~'116rpx';
+  left: ~'274rpx';
+  width: ~'66rpx';
+  height: ~'66rpx';
+  animation: floatAni 3s 1s ease-in-out infinite;
+}
+
+.bubble4 {
+  position: absolute;
+  top: ~'34rpx';
+  left: ~'66rpx';
+  width: ~'76rpx';
+  height: ~'76rpx';
+  animation: floatAni 3s 1.3s ease-in-out infinite;
+}
+
+.bubble5 {
+  position: absolute;
+  top: ~'60rpx';
+  right: ~'80rpx';
+  width: ~'88rpx';
+  height: ~'88rpx';
+  animation: floatAni 3s 0.6s ease-in-out infinite;
+}
+
+.bubble6 {
+  position: absolute;
+  top: ~'174rpx';
+  left: ~'62rpx';
+  width: ~'104rpx';
+  height: ~'104rpx';
+  animation: floatAni 3s 0.6s ease-in-out infinite;
+}
+
+.btn_hover {
+  background: @color6;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes floatAni {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, 23%, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.body {
+  background: #f3f3f3;
+  min-height: 100vh;
+}
+
+.content_body {
+  padding: ~'15rpx';
+  line-height: 1;
+}
+
+.clsswip {
+  padding: ~'15rpx';
+}
+
+.swiper-item {
+  width: 100%;
+  // background: red;
+  border-radius: ~'10rpx';
+
+  image {
+    width: ~'100%';
+    // height: ~'12rpx';
+    border-radius: ~'10rpx';
+  }
+}
+
+.t3 {
+  width: 100%;
+  height: 140px;
+}
+
+.t31 {
+  width: 33%;
+  height: 120px;
+}
+
+.kfs {
+  text-align: center;
+  margin-top: 10rpx;
+  font-size: 14px;
+}
+</style>
+
+<template>
+  <view class="content_body">
+    <view class="top">
+      <view class="title">
+        <text>公司简介</text>
+      </view>
+      <view>1、欢迎您注册“响赚平台”（由成都响赚科技有限公司负责运营，以下简称：响赚）。在您注册、使用响赚服务之前，请您认真阅读《响赚用户协议》（以下简称：本协议）。您选择并使用服务，即视为您已充分阅读并接受本协议的所有条款并且同意本协议对双方具有法律约束。</view>
+    </view>
+
+    <view class="middle">
+      <view class="title">
+        <text>地址</text>
+      </view>
+      <view>1、欢迎您注册“响赚平台”（由成都响赚科技有限公司负责运营，以下简称：响赚）。在您注册、使用响赚服务之前，请您认真阅读《响赚用户协议》（以下简称：本协议）。您选择并使用服务，即视为您已充分阅读并接受本协议的所有条款并且同意本协议对双方具有法律约束。</view>
+    </view>
+
+    <!-- <bottomList :list.sync="underwayList"></bottomList> -->
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+//import List from '../components/allAdvert/list';
+import HTTP from '../utils/http';
+import dayjs from 'dayjs';
+
+let maxPage = 0;
+let page = 1;
+export default class Wm extends wepy.page {
+  config = {
+    navigationBarTitleText: 'MainDetail'
+  };
+  data = {
+    dataList: [],
+    currentStatus: '',
+    scroll_into: '',
+    category: [
+      {
+        title: '套图1',
+        t1: [
+          {
+            title: '清新2',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          },
+          {
+            title: '清新3',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          },
+          {
+            title: '清新5',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          },
+          {
+            title: '清新2',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          },
+          {
+            title: '清新3',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          },
+          {
+            title: '清新5',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          }
+        ]
+      },
+      {
+        title: '套图12',
+        t1: [
+          {
+            title: '清新',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          }
+        ]
+      },
+      {
+        title: '套图1ddf',
+        t1: [
+          {
+            title: '清新',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          }
+        ]
+      },
+      {
+        title: '套图1dfasd',
+        t1: [
+          {
+            title: '清新',
+            sub:
+              'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+          }
+        ]
+      }
+    ]
+  };
+  components = {
+    // list: List
+  };
+
+  onReachBottom() {
+    if (page === maxPage) {
+      // wx.showToast({
+      //   title: '已经到最后一页',
+      //   icon: 'none',
+      //   duration: 2000
+      // });
+      return;
+    }
+    page = page + 1;
+    this.getAdList({
+      page_size: 10,
+      page_num: page,
+      status: this.currentStatus
+    });
+  }
+
+  methods = {
+    onStatusChange: e => {
+      const value = e.detail.value;
+      this.currentStatus = value;
+      page = 1;
+      this.dataList = [];
+      this.getAdList({
+        page_size: 10,
+        page_num: 1,
+        status: value
+      });
+    }
+  };
+
+  onLoad(options) {
+    page = 1;
+    maxPage = 1;
+    const status = options.type;
+    if (status === '2') {
+      this.scroll_into = 'put_in';
+    }
+    if (status === '3') {
+      this.scroll_into = 'done';
+    }
+    if (status === '4') {
+      this.scroll_into = 'cancel';
+    }
+    this.currentStatus = status || '';
+    this.getAdList({
+      page_size: 10,
+      page_num: 1,
+      status: status || ''
+    });
+  }
+
+  getAdList = params => {
+    HTTP.get({
+      url: '/v4/advert/put/order-list',
+      params
+    })
+      .then(res => {
+        if (res.success) {
+          const { data, totalPage } = res.data;
+          maxPage = totalPage;
+          const arr = data.map(item => {
+            return {
+              id: item.id,
+              title: item.title,
+              total_store: item.total_store,
+              total_times: item.total_times,
+              start_date: dayjs(item.start_date).format('YYYY-MM-DD'),
+              end_date: dayjs(item.end_date).format('YYYY-MM-DD'),
+              status: item.status,
+              isCount: item.status === 2 || item.status === 3
+            };
+          });
+          this.dataList = this.dataList.concat(arr);
+          this.$apply();
+        }
+      })
+      .catch(err => {});
+  };
+}
+</script>

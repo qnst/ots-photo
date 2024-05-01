@@ -1,0 +1,274 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.range_wrap {
+  height: calc(100vh - ~'80rpx');
+}
+
+.week {
+  background: #f3f3f3;
+  > view {
+    display: inline-block;
+    text-align: center;
+    width: 14.285%;
+    font-size: ~'26rpx';
+  }
+  .red {
+    color: #de3232;
+  }
+}
+
+.date_body {
+  text-align: center;
+  &:last-child {
+    padding-bottom: ~'10px';
+  }
+}
+
+.date_month {
+  padding: ~'26rpx';
+  font-size: ~'32rpx';
+}
+
+.date_days {
+  overflow: hidden;
+  > view {
+    float: left;
+    width: 14.285%;
+    position: relative;
+    padding: ~'40rpx' 0;
+    font-size: ~'28rpx';
+    color: @color;
+    vertical-align: middle;
+    > text {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: ~'14rpx';
+      font-size: ~'20rpx';
+    }
+  }
+  .disabled {
+    color: rgba(23, 19, 19, 0.25);
+  }
+  .disabled_red {
+    background: rgba(222, 50, 50, 0.6);
+    color: rgba(225, 225, 225, 0.6);
+    font-size: ~'28rpx';
+  }
+  .checked {
+    background-color: rgba(222, 50, 50, 0.1);
+  }
+  .start_point,
+  .end_point {
+    background: #de3232;
+    color: #ffffff;
+  }
+}
+
+.calendar {
+  height: calc(100% - ~'142rpx');
+}
+</style>
+<template>
+  <drawer :open.sync="open">
+    <view class="range_wrap">
+      <view class="drawer_header">
+        <text @tap="hideDrawer">取消</text>
+        <text>选择播放日期</text>
+        <text @tap="onDone">完成</text>
+      </view>
+
+      <view class="week">
+        <view class="red">日</view>
+        <view>一</view>
+        <view>二</view>
+        <view>三</view>
+        <view>四</view>
+        <view>五</view>
+        <view class="red">六</view>
+      </view>
+      <scroll-view class="calendar" scroll-y>
+        <view class="date_body">
+          <view class="date_month">{{c_m}}</view>
+          <view class="date_days">
+            <block wx:for="{{current_arr}}" wx:key="index">
+              <view class="{{item.cls}}" @tap="date_pick({{item.value}})">
+                {{item.text}}
+                <text wx:if="{{item.cls === 'disabled_red'}}">不可选</text>
+                <text wx:if="{{item.cls === 'start_point'}}">开始</text>
+                <text wx:if="{{item.cls === 'end_point'}}">结束</text>
+              </view>
+            </block>
+          </view>
+        </view>
+
+        <view class="date_body">
+          <view class="date_month">{{n_m}}</view>
+          <view class="date_days">
+            <block wx:for="{{next_arr}}" wx:key="index">
+              <view class="{{item.cls}}" @tap="date_pick({{item.value}})">
+                {{item.text}}
+                <text wx:if="{{item.cls === 'disabled_red'}}">不可选</text>
+                <text wx:if="{{item.cls === 'start_point'}}">开始</text>
+                <text wx:if="{{item.cls === 'end_point'}}">结束</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+import dayjs from 'dayjs';
+
+const today = dayjs().format('YYYY-MM-DD');
+const tomorrow = dayjs()
+  .add(1, 'd')
+  .format('YYYY-MM-DD');
+
+export default class RangePicker extends wepy.component {
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    current_month: '',
+    next_month: '',
+    current_arr: [],
+    next_arr: [],
+    start_date: '',
+    end_date: ''
+  };
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  computed = {
+    c_m() {
+      const { current_month } = this;
+      return current_month ? dayjs(current_month).format('YYYY年M月') : '';
+    },
+    n_m() {
+      const { next_month } = this;
+      return next_month ? dayjs(next_month).format('YYYY年M月') : '';
+    }
+  };
+  methods = {
+    date_pick(date) {
+      if (date <= tomorrow) return;
+      if (this.start_date) {
+        if (this.end_date) {
+          this.end_date = '';
+          this.start_date = date;
+        } else {
+          // 反选时处理
+          if (this.start_date > date) {
+            this.end_date = this.start_date;
+            this.start_date = date;
+          } else {
+            this.end_date = date;
+          }
+        }
+      } else {
+        this.start_date = date;
+      }
+      this.$apply();
+      this.generate_calendar();
+    },
+    showDrawer() {
+      this.open = true;
+    },
+    hideDrawer() {
+      this.open = false;
+    },
+    onDone() {
+      this.open = false;
+      this.$emit('calendar_done', this.start_date, this.end_date);
+    }
+  };
+  gen_blank_arr = date => {
+    const blank_days = dayjs(date)
+      .set('date', 1)
+      .day();
+    let arr = [];
+    for (let i = 1; i <= blank_days; i++) {
+      let item = {
+        cls: '',
+        value: '',
+        text: ''
+      };
+      arr.push(item);
+    }
+    return arr;
+  };
+  gen_real_day = date => {
+    const days = dayjs(date).daysInMonth();
+    const { start_date, end_date } = this;
+    let arr = [];
+    for (let i = 1; i <= days; i++) {
+      let cls = '';
+      let value = dayjs(date)
+        .date(i)
+        .format('YYYY-MM-DD');
+      let text = i;
+      if (value < today) {
+        cls = 'disabled';
+      }
+      if (value === today) {
+        cls = 'disabled_red';
+        text = '今天';
+      }
+      if (value === tomorrow) {
+        cls = 'disabled_red';
+        text = '明天';
+      }
+      if (value === start_date) {
+        cls = 'start_point';
+      }
+      if (value === end_date) {
+        cls = 'end_point';
+      }
+      if (value > start_date && value < end_date) {
+        cls = 'checked';
+      }
+      let item = {
+        cls,
+        value,
+        text
+      };
+      arr.push(item);
+    }
+    return arr;
+  };
+
+  generate_calendar() {
+    const current_month = dayjs().format('YYYY-MM');
+    const next_month = dayjs(current_month)
+      .add(1, 'month')
+      .format('YYYY-MM');
+
+    const current_blank_arr = this.gen_blank_arr(current_month);
+    const current_real_arr = this.gen_real_day(current_month);
+    const current_arr = current_blank_arr.concat(current_real_arr);
+
+    const next_blank_arr = this.gen_blank_arr(next_month);
+    const next_real_arr = this.gen_real_day(next_month);
+    const next_arr = next_blank_arr.concat(next_real_arr);
+
+    this.current_month = current_month;
+    this.next_month = next_month;
+    this.current_arr = current_arr;
+    this.next_arr = next_arr;
+    this.$apply();
+  }
+
+  onLoad() {
+    this.generate_calendar();
+  }
+}
+</script>

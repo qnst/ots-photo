@@ -1,0 +1,126 @@
+<style lang="less" scoped>
+  .list_box {
+
+  }
+
+  .list_item {
+    width: 20%;
+    text-align: center;
+    display: inline-block;
+    .item_txt {
+      color: rgba(#242A3A, .6);
+      font-size: ~'24rpx';
+      line-height: 1;
+      margin-top: ~'10rpx';
+    }
+  }
+
+  .item_icon {
+    position: relative;
+    display: inline-block;
+
+    image {
+      width: ~'54rpx';
+      height: ~'54rpx';
+    }
+    view {
+      width: ~'36rpx';
+      height: ~'36rpx';
+      line-height: ~'36rpx';
+      color: #ffffff;
+      background-color: #F12C20;
+      font-size: ~'26rpx';
+      border-radius: ~'36rpx';
+      position: absolute;
+      top: ~'-10rpx';
+      right: ~'-10rpx';
+    }
+  }
+</style>
+<template>
+  <view class="list_box">
+    <view class="list_item">
+      <view class="item_icon">
+        <navigator
+          hover-stop-propagation="{{true}}"
+          url="/pages/allAdvert?type=0"
+        >
+          <image src="../../images/wait_audit.png"></image>
+          <view wx:if="{{dataSource['0'] > 0}}">{{dataSource['0']}}</view>
+        </navigator>
+      </view>
+      <view class="item_txt">
+        <text>待审核</text>
+      </view>
+    </view>
+
+    <view class="list_item">
+      <view class="item_icon">
+        <navigator
+          url="/pages/allAdvert?type=-1"
+        >
+          <image src="../../images/wait_make.png"></image>
+          <view wx:if="{{dataSource['-1'] > 0}}">{{dataSource['-1']}}</view>
+        </navigator>
+      </view>
+      <view class="item_txt">
+        <text>待制作</text>
+      </view>
+    </view>
+
+    <view class="list_item">
+      <view class="item_icon">
+        <navigator
+          url="/pages/allAdvert?type=1"
+        >
+          <image src="../../images/wait_cast.png"></image>
+          <view wx:if="{{dataSource['1'] > 0}}">{{dataSource['1']}}</view>
+        </navigator>
+      </view>
+      <view class="item_txt">
+        <text>待投放</text>
+      </view>
+    </view>
+
+    <view class="list_item">
+      <view class="item_icon">
+        <navigator
+          url="/pages/allAdvert?type=-2"
+        >
+          <image src="../../images/refuse.png"></image>
+          <view wx:if="{{dataSource['-2'] > 0}}">{{dataSource['-2']}}</view>
+        </navigator>
+      </view>
+      <view class="item_txt">
+        <text>未通过</text>
+      </view>
+    </view>
+
+    <view class="list_item">
+      <view class="item_icon">
+        <navigator
+          url="/pages/allAdvert?type=4"
+        >
+          <image src="../../images/cancel.png"></image>
+          <view wx:if="{{dataSource['4'] > 0}}">{{dataSource['4']}}</view>
+        </navigator>
+      </view>
+      <view class="item_txt">
+        <text>已取消</text>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class Counter extends wepy.component {
+    props = {
+      dataSource: {
+        type: Object,
+        default: {}
+      }
+    };
+    methods = {};
+  }
+</script>

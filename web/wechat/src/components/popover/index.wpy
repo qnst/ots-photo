@@ -1,0 +1,87 @@
+<style lang="less" scoped>
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+  }
+
+  .popover_wrap {
+    width: ~'300rpx';
+    position: absolute;
+    background: #ffffff;
+    padding: ~'22rpx';
+    font-size: ~'22rpx';
+    color: rgba(#171313);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    border-radius: ~'8rpx';
+    transform: translateY(-100%);
+    text-align: justify;
+    line-height: 1.5;
+    box-sizing: border-box;
+    z-index: 99;
+    .arrow {
+      position: absolute;
+      width: ~'16rpx';
+      height: ~'16rpx';
+      background: transparent;
+      border-width: ~'8rpx';
+      left: ~'100rpx';
+      bottom: ~'-8rpx';
+      border-top-color: transparent;
+      border-right-color: #fff;
+      border-bottom-color: #fff;
+      border-left-color: transparent;
+      transform: translateX(-50%) rotate(45deg);
+      box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
+      border-style: solid;
+      box-sizing: border-box;
+    }
+  }
+</style>
+<template>
+  <view
+    wx:if='{{visible}}'
+    class='popover_wrap'
+    style='left:{{px}}px;top:{{py}}px;'>
+    <slot/>
+    <view class="arrow"></view>
+  </view>
+  <!--<view class="mask" wx:if="{{visible}}" @tap="onHide"></view>-->
+</template>
+<script>
+  import wepy from 'wepy';
+
+  let last = '';
+  export default class Popover extends wepy.component {
+    data = {
+      // 当前显隐状态
+      visible: false,
+      // popover 距左距离
+      px: 0,
+      // popover 距上距离
+      py: 0
+    };
+    methods = {
+      onDisplay: function(e) {
+        const id = e.target.id;
+
+        let { offsetLeft, offsetTop } = e.target;
+        this.px = offsetLeft - 34;
+        this.py = offsetTop;
+        if (last === id) {
+          this.visible = !this.visible;
+        } else {
+          this.visible = true;
+        }
+        last = id;
+        this.$apply();
+      },
+      onHide: function() {
+        this.visible = false;
+      }
+    };
+  }
+</script>

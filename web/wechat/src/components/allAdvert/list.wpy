@@ -1,0 +1,190 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.list_box {
+  padding: ~'15rpx' ~'0rpx';
+  overflow: hidden;
+}
+
+.list_item {
+  .base_card;
+  padding: ~'30rpx';
+  margin: ~'15rpx' 0;
+  line-height: 1;
+  position: relative;
+  .text {
+    font-size: ~'28rpx';
+    color: rgba(@color, 0.6);
+    margin: ~'30rpx' 0;
+    > text:last-child {
+      // margin-left: ~'60rpx';
+    }
+  }
+  .date {
+    font-size: ~'28rpx';
+    color: rgba(@color, 0.6);
+  }
+  .tag {
+    color: #ffffff;
+    padding: ~'6rpx' ~'23rpx';
+    border-radius: 2px;
+    font-size: ~'24rpx';
+    position: absolute;
+    bottom: ~'-10rpx';
+    // right: ~'-30rpx';
+    right: ~'18rpx';
+    line-height: ~'33rpx';
+  }
+  .title {
+    font-size: ~'32rpx';
+  }
+  .item_bottom {
+    text-align: center;
+    padding: ~'30rpx' 0 0;
+    border-top: ~'2rpx' solid #e4e4e4;
+    font-size: ~'28rpx';
+    margin-top: ~'46rpx';
+    image {
+      width: ~'30rpx';
+      height: ~'30rpx';
+      margin-right: ~'20rpx';
+    }
+  }
+  .item_content {
+    position: relative;
+  }
+}
+
+.color_1 {
+  background: #f7b500;
+}
+
+.color_2 {
+  background: #1dbbf9;
+}
+
+.color_3 {
+  background: #de3232;
+}
+
+.color_4 {
+  background: #6236ff;
+}
+
+.color_5 {
+  background: #4ec082;
+}
+
+.color_6 {
+  background: #242a3a;
+}
+
+.color_7 {
+  background-color: rgba(36, 42, 58, 0.5);
+}
+
+.tt {
+  font-size: ~'30rpx';
+}
+</style>
+<template>
+  <view class="list_box">
+    <block wx:for="{{source}}" wx:key="index">
+      <view class="list_item">
+        <!-- <navigator hover-class="none" url="/pages/pinlun?id={{item.id}}"> -->
+        <view hover-class="none">
+          <view class="item_content">
+            <view class="text">
+              <text>预约套系：{{item.categoryName}}</text>
+            </view>
+            <view class="text">
+              <text>套系价格：{{item.price}}</text>
+            </view>
+            <view class="text">
+              <text>预约时间：{{item.appointDate}} {{item.appointTime}}</text>
+            </view>
+            <view class="text">
+              <text>联系姓名：{{item.name}}</text>
+            </view>
+            <view class="text">
+              <text>联系电话：{{item.phone}}</text>
+            </view>
+            <view class="text">
+              <button class="tt" @tap="oncancel({{item.id}})">取消预约</button>
+            </view>
+            <!-- <view class="date">投放日期 {{item.start_date}} - {{item.end_date}}</view> -->
+            <!-- <text class="tag color_1" wx:if="{{item.remark === '可约看'}}">可约看</text>
+            <text class="tag color_2" wx:if="{{item.remark === '跟进中'}}">跟进中</text>
+            <text class="tag color_2" wx:if="{{item.remark === '已完成'}}">已完成</text>-->
+          </view>
+        </view>
+        <!-- <navigator hover-class="none" wx:if="{{item.isCount}}" class="item_bottom"
+                   url="/pages/playCount?id={{item.id}}">
+          <view>
+            <image src="../../images/chart.png"/>
+            <text>播放统计</text>
+          </view>
+        </navigator>-->
+      </view>
+    </block>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import HTTP from '../../utils/http';
+
+export default class List extends wepy.component {
+  props = {
+    source: {
+      type: Array,
+      default: []
+    }
+  };
+  computed = {};
+  methods = {
+    ondetail(id) {
+      wx.getStorage({
+        key: 'skey',
+        success: res => {
+          wx.navigateTo({ url: '/pages/pinlun?id=' + id });
+        },
+        fail: () => {
+          wx.navigateTo({ url: '/pages/auth' });
+        }
+      });
+    },
+    oncancel(idx) {
+      HTTP.post({
+        url: '/photo/delete-photo-booking',
+        params: { ids: [{ id: idx }] }
+      })
+        .then(res => {
+          if (res.success) {
+            wx.showModal({
+              title: '提示',
+              content: '取消预约成功！',
+              showCancel: false
+            });
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: '取消预约失败！',
+              showCancel: false
+            });
+          }
+
+          //wx.relanch({url:'yuyuemain'});
+          this.$parent.onPullDownRefresh();
+          // this.$apply();
+        })
+        .catch(err => {
+          wx.showModal({
+            title: '提示',
+            content: '取消预约失败！',
+            showCancel: false
+          });
+        });
+    }
+  };
+}
+</script>

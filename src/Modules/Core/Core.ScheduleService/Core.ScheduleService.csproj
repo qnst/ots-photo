@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QN.Ots.Photo.Core.ScheduleService</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>QN.Ots.Photo.Core.ScheduleService</AssemblyName>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="QN.EDF.Data" Version="2.0.0" />
+    <PackageReference Include="QN.EDF.Common" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.BusinessEntity\Core.BusinessEntity.csproj" />
+    <ProjectReference Include="..\Core.Service\Core.Service.csproj" />
+    <ProjectReference Include="..\Core.ServiceInterface\Core.ServiceInterface.csproj" />
+  </ItemGroup>
+
+</Project>

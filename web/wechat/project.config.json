@@ -1,0 +1,14 @@
+{
+  "description": "A WePY project",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wx600436aa3c430e35",
+  "projectname": "we-advert",
+  "miniprogramRoot": "./dist",
+  "lazyCodeLoading": "requiredComponents"
+}

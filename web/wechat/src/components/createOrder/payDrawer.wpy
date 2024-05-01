@@ -1,0 +1,140 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.pay_header {
+  text-align: center;
+  height: ~'90rpx';
+  line-height: ~'90rpx';
+  font-size: ~'32rpx';
+  border-bottom: ~'2rpx solid #E4E4E4';
+  background: #ffffff;
+}
+
+.pay_content {
+  padding: ~'40rpx';
+  .money {
+    font-size: ~'60rpx';
+    text-align: center;
+    font-weight: bold;
+  }
+  .money_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: ~'40rpx' 0;
+    font-size: ~'32rpx';
+  }
+  .pay_btn {
+    .base_btn;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: ~'40rpx';
+    image {
+      width: ~'40rpx';
+      height: ~'40rpx';
+      margin-right: ~'20rpx';
+    }
+  }
+}
+</style>
+<template>
+  <drawer :open.sync="open">
+    <view class="pay_header">
+      <text>确认付款</text>
+    </view>
+    <view class="pay_content">
+      <view class="money">¥{{detail.short_money}}</view>
+      <view class="money_item">
+        <text>订单金额</text>
+        <text>¥{{detail.order_money}}</text>
+      </view>
+      <view class="money_item">
+        <text>钱包余额抵扣</text>
+        <text>-¥{{surplus_money}}</text>
+      </view>
+      <button class="pay_btn" @tap="onPay">
+        <!--<image src="../../images/wechat.png"/>-->
+        <text>立即付款</text>
+      </button>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+import HTTP from '../../utils/http';
+
+export default class payDrawer extends wepy.component {
+  props = {
+    detail: {
+      type: Object,
+      default: {}
+    }
+  };
+  components = {
+    drawer
+  };
+  data = {
+    open: false
+  };
+
+  computed = {
+    surplus_money() {
+      return Math.abs(this.detail.surplus_money);
+    }
+  };
+
+  methods = {
+    showDrawer() {
+      this.open = true;
+    },
+    onPay() {
+      if (this.detail.short_money === 0) {
+        this.$parent.handleCreateOrder();
+      } else {
+        this.wxPay();
+      }
+    }
+  };
+
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  wxPay = () => {
+    HTTP.post({
+      url: '/v4/api/payment/weixinpay/mp/jspay',
+      params: {
+        money: this.detail.short_money
+      }
+    })
+      .then(res => {
+        if (res.success) {
+          this.open = false;
+          wx.requestPayment({
+            timeStamp: res.data.timeStamp,
+            nonceStr: res.data.nonceStr,
+            package: res.data.packageValue,
+            signType: res.data.signType,
+            paySign: res.data.paySign,
+            success: res => {
+              this.$emit('checkPaymentDone');
+            },
+            fail: function(res) {}
+          });
+          this.$apply();
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.msg,
+            showCancel: false
+          });
+        }
+      })
+      .catch(err => {});
+  };
+  balancePay = () => {};
+}
+</script>

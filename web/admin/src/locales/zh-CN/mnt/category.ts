@@ -1,0 +1,48 @@
+export default {
+    'mnt.category.fields.name.id': '编号',
+    'mnt.category.fields.name.name': '分类名称',
+    'mnt.category.fields.name.thumb': '照片',
+    'mnt.category.fields.name.parent_id':'一级分类',
+    'mnt.category.fields.name.remark':'描述',
+    'mnt.category.fields.name.dataStatus': '数据状态',
+    'mnt.category.fields.name.price': '套餐价格',
+    'mnt.category.fields.name.subTitle': '套餐简介',
+
+    'mnt.category.fields.rule.name': '分类名称为必填项',
+    'mnt.category.fields.rule.parent_id': '一级分类为必填项',
+    'mnt.category.fields.rule.remark': '描述为必填项',
+    'mnt.category.fields.rule.price': '套餐价格',
+    'mnt.category.fields.rule.subTitle': '套餐简介',
+
+    'mnt.category.fields.ph.name': '请输入分类名称',
+    'mnt.category.fields.ph.parent_id': '请选择一级分类',
+    'mnt.category.fields.ph.remark': '请输入描述',
+    'mnt.category.fields.ph.dataStatus': '数据状态',
+    'mnt.category.fields.ph.price': '请输入套餐价格',
+    'mnt.category.fields.ph.subTitle': '请输入套餐简介',
+
+    'mnt.category.fields.tip.appId': '应用编号，提示zh-CN文本描述',
+    'mnt.category.fields.tip.appName': '应用名称提示',
+    'mnt.category.fields.tip.dataStatus': '数据状态提示',
+
+    'mnt.category.title.list': '摄影分类列表',
+    'mnt.category.title.create': "创建摄影分类",
+    'mnt.category.title.update': '编辑摄影分类',
+    'mnt.category.title.search': '高级搜索',
+    'mnt.category.title.detail': '应用详情',
+    'mnt.category.title.upload': '上传图片',
+
+    'mnt.category.btn.search': '查询',
+    'mnt.category.btn.advSearch': '高级搜索',
+    'mnt.category.btn.restReload': '重置查询',
+    'mnt.category.btn.create': '创建摄影分类',
+    'mnt.category.btn.upload': '上传图片',
+
+    'mnt.category.msg.list.loading': '正在加载...',
+    'mnt.category.msg.add.loading': '正在创建...',
+    'mnt.category.msg.update.loading': '正在更新...',
+    'mnt.category.msg.delete.loading': '正在删除...',
+    'mnt.category.msg.detail.loading': '正在获取详情...',
+    'mnt.category.msg.export.loading': '正在导出...',
+    'mnt.category.msg.export.success': '导出成功',
+}

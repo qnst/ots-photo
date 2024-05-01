@@ -1,0 +1,137 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.hours_wrap {
+  padding: ~'30rpx';
+  border-top: ~'2rpx' solid #e4e4e4;
+}
+
+.checkbox_group {
+  display: flex;
+  flex-wrap: wrap;
+  .checkbox_box {
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    padding: ~'10rpx';
+    text-align: center;
+    font-size: ~'26rpx';
+    color: rgba(@color, 0.4);
+    box-sizing: border-box;
+  }
+  .checkbox {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e4e4e4;
+    border-radius: ~'4rpx';
+    height: ~'60rpx';
+    line-height: ~'60rpx';
+    checkbox {
+      display: none;
+    }
+  }
+  .active {
+    background: @color;
+    color: #ffffff;
+  }
+}
+
+.ttttt {
+  // height: ~'400rpx';
+  // 如果二级页面，没有底部菜单，取消自定义高度
+}
+</style>
+<template>
+  <drawer :open.sync="open" class="ttttt">
+    <view class="drawer_header">
+      <text @tap="hideDrawer">取消</text>
+      <text>选择服务时段</text>
+      <text @tap="onDone">完成</text>
+    </view>
+    <view class="hours_wrap">
+      <radio-group class="checkbox_group" @change="checkboxChange">
+        <view class="checkbox_box" wx:for="{{hours}}" wx:key="index">
+          <label class="checkbox" :class="{'active':item.checked}">
+            <checkbox checked="{{item.checked}}" value="{{item.value}}" />
+            {{item.label}}
+          </label>
+        </view>
+      </radio-group>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+
+let hours = [
+  { value: '09：00~10：00', label: '09：00~10：00', checked: false },
+  { value: '11：00~13：00', label: '11：00~13：00', checked: false },
+  { value: '14：00~16：00', label: '14：00~16：00', checked: false },
+  { value: '16：00~18：00', label: '16：00~18：00', checked: false }
+];
+/*
+for (let i = 0; i < 24; i++) {
+  hours.push({
+    value: i + '',
+    label: i + '点',
+    checked: false
+  });
+}*/
+
+export default class HoursSelect extends wepy.component {
+  props = {
+    value: {
+      type: Array,
+      default: []
+    }
+  };
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    hours,
+    values: []
+  };
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  methods = {
+    hideDrawer() {
+      this.open = false;
+    },
+    showDrawer() {
+      this.open = true;
+    },
+    checkboxChange(e) {
+      this.updateChecked(e.detail.value);
+    },
+    onDone() {
+      const values = this.values;
+      this.open = false;
+      this.$emit('onHourSelect', values);
+    }
+  };
+  updateChecked = checked => {
+    //clear all first
+    this.hours = this.hours.map(item => {
+      return { ...item, checked: false };
+    });
+
+console.log("this.hours",this.hours)
+    this.hours = this.hours.map(item => {
+      if (checked.indexOf(item.value) > -1) {
+        return { ...item, checked: true };
+      }
+      return { ...item, checked: false };
+    });
+    this.values = checked;
+
+    console.log("this.hours2",this.hours)
+    console.log("this.values",this.values)
+  };
+}
+</script>

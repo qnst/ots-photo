@@ -1,0 +1,581 @@
+<style lang="css">
+  .canvas-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .canvas {
+    top: 0;
+    left: 0;
+    position: relative;
+    background-color: transparent;
+  }
+
+  .canvas-detail-panel {
+    display: block;
+    padding: 15px;
+  }
+
+  .canvas-detail-panel
+  .item {
+    display: inline-block;
+    width: 50%;
+    padding-bottom: 6px;
+    font-size: ~'25rpx';
+    color: #353535;
+    white-space: nowrap;
+    vertical-align: top;
+    overflow: visible;
+  }
+
+  .canvas-detail-panel
+  .item > view {
+    width: 50%;
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+    vertical-align: top;
+  }
+
+  .canvas-detail-panel
+  .item.disabled {
+    opacity: 0.5;
+  }
+
+  .canvas-detail-panel
+  .arc {
+    display: inline-block;
+    width: ~'15rpx';
+    height: ~'15rpx';
+    border: 2px solid #ffffff;
+    border-radius: 100%;
+    padding: 0;
+    vertical-align: top;
+    margin-right: 5px;
+  }
+
+  .canvas-detail-panel
+  .text {
+    display: inline-block;
+    vertical-align: top;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: -3px;
+  }
+
+  .canvas-detail-panel
+  .value {
+    text-indent: 25px;
+    margin-top: -3px;
+  }
+</style>
+<template>
+
+  <view class="canvas-container">
+    <view class="canvas-detail-panel" wx:if="{{showDetailPanel && activeData.length>0}}">
+      <block wx:for="{{activeData}}" wx:key="name">
+        <view class="item {{item.value ? '':'disabled'}}">
+          <view class="name">
+            <view class="arc" style="border-color:{{item.color}};"></view>
+            <view class="text">{{item.name}}</view>
+          </view>
+          <view class="value">
+            <block wx:if="{{item.value}}">{{item.value}}</block>
+            <block wx:if="{{!item.value}}">-</block>
+          </view>
+        </view>
+      </block>
+    </view>
+    <canvas class="canvas" canvas-id="{{lineId}}" wx:if="{{lineId}}" style="width: {{width}}px; height: {{height}}px;"
+            binderror="canvasError"></canvas>
+    <canvas class="canvas" canvas-id="{{topId}}" wx:if="{{topId}}"
+            style="width: {{width}}px; height: {{height}}px;margin-top:-{{height}}px;" binderror="canvasError"
+            bindtouchend="activeEnd" bindtouchstart="activeAction" bindtouchmove="activeAction"></canvas>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class extends wepy.component {
+    props = {
+      paddingX: {
+        default: 18,
+        type: Number
+      },
+      paddingY: {
+        default: 15,
+        type: Number
+      },
+      height: {
+        default: 215,
+        type: Number
+      },
+      width: {
+        default: 0,
+        type: Number
+      },
+      lineWidth: {
+        default: 2,
+        type: Number
+      },
+      axesColor: {
+        default: '#F5F5F5',
+        type: String
+      },
+      xLabelColor: {
+        default: '#111111',
+        type: String
+      },
+      yLabelColor: {
+        default: '#111111',
+        type: String
+      },
+      collection: {
+        default: []
+      },
+      labels: {
+        default: []
+      },
+      colors: {
+        default: ['#FF5974', '#F79206', '#FFC068', '#FFEB07', '#90A7FF', '#2AC2FF', '#0CC2A5', '#79DBB9', '#ED649C', '#36F3DD']
+      },
+      //x轴label过滤显示
+      onXLabelFilter: {
+        default: null
+      },
+      onYLabelFilter: {
+        default: null
+      },
+      yLabelFormat: {
+        default: null
+      },
+      yLabelRows: {
+        default: 5
+      },
+      //坐标轴Y轴过滤
+      onXAxesFilter: {
+        default: null
+      },
+      onYAxesFilter: {
+        default: null
+      },
+      //当前选中的点，默认最后一个点
+      active: {
+        default: null
+      },
+      //跟随坐标x轴
+      showFollowXAxes: {
+        default: false
+      },
+      //跟随坐标y轴
+      showFollowYAxes: {
+        default: false
+      },
+      //对准某一列时的回调函数
+      onActived: {
+        default: null
+      },
+      //画板的开始位置
+      positionX: {
+        default: 0
+      },
+      positionY: {
+        default: 0
+      },
+      showDetailPanel: {
+        default: false
+      },
+      showMaxYLabel: {
+        default: false
+      },
+      showMaxYAxes: {
+        default: false
+      },
+      showMinYLabel: {
+        default: false
+      },
+      showMinYAxes: {
+        default: false
+      },
+      valuePadding: {
+        default: 0
+      }
+    };
+
+    data = {
+      lineId: '',
+      cmpId: '',
+      topId: '',
+      activeData: []
+    };
+
+    ctxs = {};
+
+    methods = {
+      activeAction(e) {
+        if (this._shouldRender() && e.touches) {
+          let { x: tX } = e.touches[0], { xLabelPoint } = this.params;
+          let { positionX } = this;
+          //找最近的点
+          let fX = xLabelPoint.reduce(function(prev, curr) {
+            return Math.abs(curr + positionX - tX) < Math.abs(prev + positionX - tX) ? curr : prev;
+          });
+          let findIndex = xLabelPoint.indexOf(fX);
+          this.active = findIndex;
+          this._activeAction();
+        }
+      },
+      activeEnd() {
+      },
+      canvasError() {
+        console.log(arguments);
+      }
+    };
+
+    onLoad() {
+      if (this.width <= 0) {
+        let { windowWidth } = wx.getSystemInfoSync();
+        this.width = windowWidth;
+      }
+      this.cmpId = this._uuid();
+      this.topId = 'top_' + this.cmpId;
+      this.lineId = 'line_' + this.cmpId;
+      this.$apply();
+    }
+
+    draw() {
+      if (this._shouldRender()) {
+        this.active = this.labels.length - 1;
+        this.$apply();
+        let error = [this._initParams, this._fetchPoint, this._draw].find(fn => fn.call(this) === false);
+        if (!error) {
+          this._activeAction();
+        }
+      }
+    }
+
+    //检查参数是否可以渲染
+    _shouldRender() {
+      return this.labels && this.labels.length > 0 && this.collection && this.collection.length > 0;
+    }
+
+    //初始化参数
+    _initParams() {
+      let params = [];
+      params.maxValue = this._getMaxValue();
+      params.minValue = this._getMinValue();
+      // params.labelPadding = 30
+      params.xLabelHeight = 20;
+      this.valuePadding = Number(this.valuePadding);
+      params.arcR = this.lineWidth * 2;
+      //圆点实际周径
+      params.arcRR = (params.arcR + this.lineWidth);
+      //范围坐标
+      params.startX = this.paddingX;
+      params.endX = this.width - this.paddingX - params.arcRR;
+      params.startY = this.paddingY + params.arcRR;
+      params.endY = this.height - this.paddingY - params.arcRR - params.xLabelHeight;
+      //y轴坐标比例 posRange/dataRange = y/v   y = (posRange/dataRange*v)
+      // params.dataRangeY = (params.endY - this.paddingY - params.arcRR)
+      params.posRange = this.height - this.paddingY * 2 - params.arcRR * 2 - params.xLabelHeight;
+      params.dataRange = params.maxValue - params.minValue;
+      params.scaleY = params.posRange / params.maxValue;
+      //x轴坐标间隔
+      params.colWidth = (this.width - this.paddingX * 2) / (this.labels.length - 1);
+      // console.log(colWidth)
+
+      params.sAngle = 0 * Math.PI;
+      params.eAngle = 2 * Math.PI;
+
+      params.point = [];
+      params.maxYPos = [];
+      params.minYPos = [];
+      //收集所有的X轴label的点
+      params.xLabelPoint = [];
+      //主线canvas
+      params.ctx = wx.createCanvasContext(this.lineId);
+
+      this.params = params;
+    }
+
+    //收集数据点
+    _fetchPoint() {
+      let { collection, labels, colors, height, params: { minValue, maxValue, scaleY, startX, startY, endX, endY, arcRR, colWidth, dataRange }, paddingY } = this;
+      //收集所有点
+      let point = [], xLabelPoint = new Array(labels.length), maxYPos, minYPos;
+
+      collection.map(({ id, name, data }, collIndex) => {
+        if (data.length > 0) {
+          let pt = { pos: new Array(labels.length), color: colors[collIndex], name };
+          labels.map((label, lbIndex) => {
+            let find = data.find(el => el.key == label);
+            if (find) {
+              let { value, key, ext = {} } = find;
+              value = Number(value);
+              let valueAxes = value * scaleY;
+              //  console.log('valueAxes:%s',valueAxes)
+              let [x, y] = [startX + lbIndex * colWidth, endY - valueAxes];
+              x = Math.min(x, endX);
+              x = Math.max(startX, x);
+              y = Math.min(y, endY);
+              y = Math.max(startY, y);
+              if (value == maxValue) {
+                maxYPos = y;
+              }
+              if (value == minValue) {
+                minYPos = y;
+              }
+              pt.pos[lbIndex] = [x, y, { value, key, name, ext }];
+              xLabelPoint[lbIndex] = x;
+            }
+          });
+          point.push(pt);
+        }
+      });
+      this.params.point = point;
+      this.params.xLabelPoint = xLabelPoint;
+      this.params.maxYPos = maxYPos;
+      this.params.minYPos = minYPos;
+
+      return point.length;
+    }
+
+    //画坐标
+    _draw() {
+      let {
+        labels,
+        params: { ctx, point = [], startX, startY, endX, endY, arcR, arcRR, sAngle, eAngle, maxValue, minValue, maxYPos, minYPos, xLabelHeight },
+        axesColor, lineId, showFollowYAxes, showFollowXAxes, xLabelColor, yLabelColor, onXLabelFilter, onXAxesFilter,
+        onYLabelFilter, onYAxesFilter, yLabelRows, yLabelFormat, paddingY, showMaxYLabel, showMaxYAxes, showMinYAxes, showMinYLabel, valuePadding
+      } = this;
+
+      let isRenderLabel = {}, singlePoint = point.length == 1;
+
+      if (showMaxYAxes) {
+        ctx.beginPath();
+        ctx.setStrokeStyle(axesColor);
+        ctx.moveTo(startX, maxYPos);
+        ctx.lineTo(endX, maxYPos);
+        ctx.stroke();
+        ctx.closePath();
+      }
+      if (showMinYAxes) {
+        ctx.beginPath();
+        ctx.setStrokeStyle(axesColor);
+        ctx.moveTo(startX, minYPos);
+        ctx.lineTo(endX, minYPos);
+        ctx.stroke();
+        ctx.closePath();
+      }
+      //是否显示最高值Y轴label
+      if (showMaxYLabel && !this._isYLabelRepeat(maxYPos + 4)) {
+        ctx.beginPath();
+        ctx.setFillStyle(yLabelColor);
+        ctx.setFontSize(10);
+        ctx.fillText(typeof yLabelFormat == 'function' ? this.yLabelFormat.call(this.$parents, maxValue) : maxValue, startX - arcRR, maxYPos + 4);
+        ctx.fill();
+        ctx.closePath();
+      }
+      if (showMinYLabel && !this._isYLabelRepeat(minYPos - 8)) {
+        ctx.beginPath();
+        ctx.setFillStyle(yLabelColor);
+        ctx.setFontSize(10);
+        ctx.fillText(typeof yLabelFormat == 'function' ? this.yLabelFormat.call(this.$parents, minValue) : minValue, startX - arcRR, minYPos - 8);
+        ctx.fill();
+        ctx.closePath();
+      }
+      point.map(line => {
+        let { pos, color } = line;
+        //紧随坐标和字
+        pos.map((pt, index) => {
+          if (pt) {
+            let [x, y, { value, key }] = pt || [];
+            if (showFollowYAxes) {
+              ctx.beginPath();
+              ctx.setStrokeStyle(axesColor);
+              ctx.moveTo(x, endY);
+              ctx.lineTo(x, y);
+              ctx.stroke();
+              ctx.closePath();
+            }
+            if (showFollowXAxes) {
+              ctx.beginPath();
+              ctx.setStrokeStyle(axesColor);
+              ctx.moveTo(startX, y);
+              ctx.lineTo(x, y);
+              ctx.stroke();
+              ctx.closePath();
+            }
+
+            let xLabelShow = typeof onXLabelFilter == 'function' ? onXLabelFilter(key, index) : false;
+            let axesXShow = typeof onXAxesFilter == 'function' ? onXAxesFilter(key, index) : false;
+            if (onXAxesFilter == 'enable' || axesXShow) {
+              ctx.beginPath();
+              ctx.setStrokeStyle(axesColor);
+              ctx.moveTo(x, 0);
+              ctx.lineTo(x, endY);
+              ctx.stroke();
+              ctx.closePath();
+            }
+            // console.log('%s - %s',xLabelShow,!isRenderLabel[key])
+            if ((onXLabelFilter == 'enable' || xLabelShow) && !isRenderLabel[key]) {
+              ctx.beginPath();
+              ctx.setFillStyle(xLabelColor);
+              ctx.setFontSize(10);
+              let offset = 6 * key.length / 2;
+              let tX = Math.min(x - offset, endX - offset);
+              tX = Math.max(startX - arcRR, tX);
+              ctx.fillText(key, tX, endY + xLabelHeight + arcRR);
+              ctx.fill();
+              ctx.closePath();
+              isRenderLabel[key] = true;
+            }
+          }
+        });
+        //画数据线
+        pos.reduce(function(prev, cur) {
+          if (cur && prev) {
+            let [pX, pY] = prev;
+            let [cX, cY] = cur;
+            ctx.beginPath();
+            ctx.setStrokeStyle(color);
+            ctx.moveTo(pX, pY);
+            ctx.lineTo(cX, cY);
+            ctx.stroke();
+            ctx.closePath();
+          }
+          return cur;
+        }, null);
+
+        //画圆点
+        pos.map(([x, y]) => {
+          ctx.beginPath();
+          ctx.setStrokeStyle(color);
+          ctx.arc(x, y, arcR, sAngle, eAngle);
+          ctx.stroke();
+          ctx.setFillStyle('white');
+          ctx.fill();
+          ctx.closePath();
+        });
+
+        //y轴坐标
+        //y轴label
+        {
+          let step = yLabelRows ? endY / yLabelRows : yLabelRows;
+          let index = 0;
+          let v = startY;
+          while (v <= endY) {
+            let isMin = v == startY, isMax = v == endY;
+            //y轴坐标是否显示
+            let yLabelShow = typeof onYLabelFilter == 'function' ? onYLabelFilter(v, index, isMin, isMax) : false;
+            //y轴坐标线是否显示
+            let axesYShow = typeof onYAxesFilter == 'function' ? onYAxesFilter(v, index, isMin, isMax) : false;
+            if (onYAxesFilter === 'enable' || axesYShow) {
+              ctx.beginPath();
+              ctx.setStrokeStyle(axesColor);
+              ctx.moveTo(startX, v);
+              ctx.lineTo(endX, v);
+              ctx.stroke();
+              ctx.closePath();
+            }
+            if (onYLabelFilter === 'enable' || yLabelShow) {
+              //避免覆盖圆点
+              if (!this._isYLabelRepeat(v)) {
+                let label = typeof yLabelFormat == 'function' ? yLabelFormat(v) : v;
+                ctx.beginPath();
+                ctx.setFillStyle(yLabelColor);
+                ctx.fillText(label, startX - arcRR, v);
+                ctx.closePath();
+              }
+            }
+            index++;
+            v += step;
+          }
+        }
+      });
+      ctx.draw();
+
+
+    }
+
+    _isYLabelRepeat(v) {
+      let { params: { point } } = this;
+      let isRepeat = false;
+      point.map(({ pos }) => {
+        let [x, y] = pos[0] || [];
+        if (Math.abs(y - v) < 8) {
+          isRepeat = true;
+          return false;
+        }
+      });
+      return isRepeat;
+    }
+
+
+    _activeAction() {
+      let ctx = wx.createCanvasContext(this.topId);
+      ctx.setLineWidth(this.lineWidth * 2);
+      let { params: { sAngle, eAngle, point, arcR }, yLabelFormat } = this;
+      //焦点的列的圆点变大
+      let activeData = [];
+      point.map(({ pos, color, name }) => {
+        let active = { name, color };
+        pos.map((pt, index) => {
+          if (pt && index == this.active) {
+            let [x, y, { value }] = pt;
+            ctx.beginPath();
+            ctx.setStrokeStyle(color);
+            ctx.arc(x, y, arcR * 2, sAngle, eAngle);
+            ctx.stroke();
+            ctx.setFillStyle('white');
+            ctx.fill();
+            ctx.closePath();
+            active.value = typeof yLabelFormat == 'function' ? yLabelFormat.call(this.$parents, value) : value;
+          }
+        });
+        activeData.push(active);
+      });
+
+      ctx.draw();
+
+      //详细面板
+      if (this.showDetailPanel) {
+        //activeData
+        this.activeData = activeData;
+        this.$apply();
+      }
+
+      typeof this.onActived == 'function'
+      && this.onActived.call(
+        this.$parent,
+        point.map(({ pos }, index) => pos[this.active] ? pos[this.active][2] : null),
+        this.labels[this.active],
+        this.active);
+
+    }
+
+    _getMaxValue() {
+      let data = this.collection.map(item => Math.max(...item.data.filter(i => i && i.value !== undefined).map(i => Number(i.value)))) || [];
+      return Math.max(...data);
+    }
+
+    _getMinValue() {
+      let data = this.collection.map(item => Math.min(...item.data.filter(i => i && i.value !== undefined).map(i => Number(i.value)))) || [];
+      return Math.min(...data);
+    }
+
+    _uuid() {
+      let s = [];
+      let hexDigits = '0123456789abcdef';
+      for (let i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = '4';  // bits 12-15 of the time_hi_and_version field to 0010
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+      s[8] = s[13] = s[18] = s[23] = '-';
+
+      let uuid = s.join('');
+      return uuid;
+    }
+  }
+</script>

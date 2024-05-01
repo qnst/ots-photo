@@ -1,0 +1,115 @@
+<style lang="less">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+import mta from 'mta-wechat-analysis';
+
+import { setStore } from 'wepy-redux';
+import configStore from './store';
+
+const store = configStore();
+setStore(store);
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/main',
+      // 'pages/local',
+      // 'pages/wallet',
+      // 'pages/allAdvert',
+      // 'pages/createOrder',
+      // 'pages/selectedStore',
+      // 'pages/orderSuccess',
+      // 'pages/advertDetail',
+      // 'pages/withdraw',
+      // 'pages/sendCode',
+      // 'pages/bindAlipay',
+      'pages/profile',
+      // 'pages/playStores',
+      // 'pages/playCount',
+      'pages/auth',
+      // 'pages/standard',
+      'pages/agreement',
+      // 'pages/detailStores',
+      // 'pages/chart',
+      'pages/maindetail',
+      'pages/mainsubdetail',
+      'pages/kefu',
+      'pages/wm',
+      'pages/yuyue',
+      'pages/yuyuemain'
+    ],
+    permission: {
+      'scope.userLocation': {
+        desc: '你的位置信息将用于小程序位置接口的效果展示'
+      }
+    },
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#7C7F89',
+      selectedColor: '#171313',
+      backgroundColor: '#ffffff',
+      borderStyle: 'white',
+      list: [
+        {
+          pagePath: 'pages/main',
+          iconPath: './images/logo_inactive.png',
+          selectedIconPath: './images/logo_active.png',
+          text: '首页'
+        },
+        {
+          pagePath: 'pages/yuyuemain',
+          iconPath: './images/xk_inactive.png',
+          selectedIconPath: './images/xk_active.png',
+          text: '预约'
+        },
+        // {
+        //   pagePath: 'pages/kefu',
+        //   iconPath: './images/logo_t1_inactive.png',
+        //   selectedIconPath: './images/logo_t1_active.png',
+        //   text: '客服，流程'
+        // },
+        {
+          pagePath: 'pages/profile',
+          iconPath: './images/profile.png',
+          selectedIconPath: './images/profile_b.png',
+          text: '我的'
+        }
+      ]
+    }
+  };
+
+  globalData = {
+    userInfo: null
+  };
+
+  constructor() {
+    super();
+    this.use('requestfix');
+  }
+
+  onLaunch(options) {
+    mta.App.init({
+      appID: '500682009',
+      autoReport: true,
+      statParam: true,
+      ignoreParams: []
+    });
+  }
+}
+</script>

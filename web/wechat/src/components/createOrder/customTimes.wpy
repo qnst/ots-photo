@@ -1,0 +1,83 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.times_modal {
+  .title {
+    font-size: ~'32rpx';
+    font-weight: bold;
+  }
+  .body {
+    padding-top: ~'50rpx';
+    input {
+      border: ~'2rpx' solid rgba(@color4);
+      height: ~'92rpx';
+      line-height: ~'92rpx';
+      text-align: left;
+      border-radius: ~'6rpx';
+      padding: 0 ~'30rpx';
+      font-size: ~'32rpx';
+    }
+  }
+  .desc {
+    font-size: ~'28rpx';
+    color: @color6;
+    margin: ~'30rpx' 0 ~'40rpx';
+  }
+  .btm_btn {
+    .base_btn;
+  }
+}
+</style>
+<template>
+  <iviewer>
+    <view class="times_modal">
+      <view class="title">自定义播放次数</view>
+      <view class="body">
+        <input placeholder="请输入每小时播放次数" @input="onCustomInput" type="number"/>
+      </view>
+      <view class="desc">范围：1-{{maxSecond}}次之间</view>
+      <view>
+        <button :class="{'btm_btn': isEnable}" disabled="{{!isEnable}}" @tap="onConfirm">确定</button>
+      </view>
+    </view>
+  </iviewer>
+</template>
+<script>
+import wepy from 'wepy';
+import iviewer from '../modal/index';
+
+export default class CustomTimes extends wepy.component {
+  components = {
+    iviewer
+  };
+  props = {
+    len: {
+      type: Number,
+      default: 0
+    }
+  };
+  data = {
+    value: 0
+  };
+  computed = {
+    maxSecond() {
+      return Math.floor(3570 / this.len);
+    },
+    isEnable() {
+      return this.value > 0 && this.value < Math.floor(3570 / this.len);
+    }
+  };
+  methods = {
+    show() {
+      this.$invoke('iviewer', 'showModal');
+    },
+    onCustomInput(e) {
+      this.value = e.detail.value;
+    },
+    onConfirm() {
+      this.$invoke('iviewer', 'hideModal');
+      this.$emit('onCustomTimes', this.value);
+    }
+  };
+}
+</script>

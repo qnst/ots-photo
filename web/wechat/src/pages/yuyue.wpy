@@ -1,0 +1,1116 @@
+<style lang="less">
+@import '../common/index';
+
+.create_order {
+  min-height: 100vh;
+  background: #f3f3f3;
+  padding: 0 ~'15rpx' ~'122rpx';
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.form_item {
+  background: #ffffff;
+  padding: ~'30rpx';
+  border-radius: ~'15rpx';
+  margin-top: ~'20rpx';
+  font-size: ~'32rpx';
+}
+
+.input_view {
+  .form_item;
+  input {
+    font-size: ~'32rpx';
+  }
+}
+
+.textarea_view {
+  .form_item;
+  textarea {
+    width: 100%;
+    height: ~'160rpx';
+    z-index: 10;
+  }
+  .help {
+    display: flex;
+    justify-content: space-between;
+    font-size: ~'28rpx';
+    color: rgba(@color, 0.4);
+  }
+}
+
+.picker_view {
+  .form_item;
+  padding: ~'40rpx' ~'30rpx';
+  .picker_wrap {
+    display: flex;
+    overflow: hidden;
+    font-size: ~'32rpx';
+    > .label {
+      float: left;
+      color: rgba(@color, 0.6);
+    }
+    > .item {
+      flex: 1;
+      text-align: center;
+      color: rgba(@color, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+  .date_divider {
+    margin: 0 ~'24rpx';
+  }
+  .divider {
+    display: block;
+    height: ~'2rpx';
+    width: 100%;
+    background: #f3f3f3;
+    margin: ~'30rpx' 0;
+  }
+  > .label {
+    color: rgba(@color, 0.6);
+  }
+}
+
+.time {
+  > .label {
+    color: rgba(@color, 0.6);
+    margin-bottom: ~'30rpx';
+    /*line-height: 1;*/
+  }
+  .custom {
+  }
+}
+
+.stores {
+  > .label {
+    color: rgba(@color, 0.6);
+    margin-bottom: ~'30rpx';
+  }
+}
+
+.footer {
+  display: flex;
+  height: ~'92rpx';
+  line-height: ~'92rpx';
+  background: #ffffff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: ~'32rpx';
+  view {
+    padding: 0 ~'30rpx';
+    flex: 1;
+    color: rgba(@color, 0.6);
+    text {
+      color: #f12c20;
+    }
+  }
+  button {
+    border-radius: 0;
+    color: #ffffff;
+    width: ~'250rpx';
+    border: none;
+  }
+}
+
+.times_radio {
+  margin: 0 -~'4rpx';
+  display: flex;
+  view {
+    position: relative;
+    display: inline-block;
+    margin: 0 ~'4rpx';
+    flex: 1;
+    height: ~'60rpx';
+    line-height: ~'60rpx';
+    text-align: center;
+    border: 1px solid #e4e4e4;
+    font-size: ~'26rpx';
+    color: rgba(@color, 0.4);
+    border-radius: ~'4rpx';
+  }
+  .active {
+    background: @color;
+    color: #ffffff;
+  }
+}
+
+.radio-group {
+  margin: 0 -~'4rpx';
+  display: flex;
+  .radio {
+    position: relative;
+    display: inline-block;
+    margin: 0 ~'4rpx';
+    flex: 1;
+    height: ~'60rpx';
+    line-height: ~'60rpx';
+    text-align: center;
+    border: 1px solid #e4e4e4;
+    font-size: ~'26rpx';
+    color: rgba(@color, 0.4);
+    border-radius: ~'4rpx';
+    radio {
+      opacity: 0;
+      position: absolute;
+    }
+  }
+  .active {
+    background: @color;
+    color: #ffffff;
+  }
+}
+
+.store_count {
+  font-size: ~'32rpx';
+  overflow: hidden;
+  display: flex;
+  margin: ~'50rpx' 0;
+  text {
+    color: @color_r;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    flex: 1;
+    text-align: right;
+    > image {
+      width: ~'10rpx';
+      height: ~'17rpx';
+      margin-left: ~'25rpx';
+    }
+  }
+}
+
+.distance {
+  margin: -~ '10rpx' 0;
+  view {
+    display: inline-block;
+    width: ~'120rpx';
+    height: ~'64rpx';
+    line-height: ~'64rpx';
+    color: #ffffff;
+    text-align: center;
+    background: @color;
+    border-radius: ~'4rpx';
+    margin: ~'20rpx' ~'10rpx' 0;
+    font-size: ~'26rpx';
+  }
+  image {
+    width: ~'18rpx';
+    height: ~'18rpx';
+    margin-left: ~'10rpx';
+  }
+}
+
+.times_modal {
+  .title {
+    font-size: ~'32rpx';
+    font-weight: bold;
+  }
+  .body {
+    padding-top: ~'50rpx';
+    input {
+      border: ~'2rpx' solid rgba(@color4);
+      height: ~'92rpx';
+      line-height: ~'92rpx';
+      text-align: left;
+      border-radius: ~'6rpx';
+      padding: 0 ~'30rpx';
+      font-size: ~'32rpx';
+    }
+  }
+  .desc {
+    font-size: ~'28rpx';
+    color: @color6;
+    margin: ~'30rpx' 0 ~'40rpx';
+  }
+  .btm_btn {
+    .base_btn;
+  }
+}
+
+.pay_active {
+  // background: #DE3232 !important;
+  background: #242a3a !important;
+  color: #ffffff;
+  font-size: ~'35rpx';
+}
+button[plain][disabled] {
+  background: @color4;
+  color: #ffffff;
+}
+.help_icon {
+  width: ~'28rpx';
+  height: ~'28rpx';
+  padding: ~'18rpx';
+  vertical-align: middle;
+}
+
+.audio_len {
+  display: inline-block;
+  text {
+    color: #f12c20;
+  }
+}
+
+.help_modal {
+  .title {
+    font-size: ~'32rpx';
+    font-weight: bold;
+    text-align: center;
+  }
+  .content {
+    font-size: ~'28rpx';
+    margin: ~'40rpx' 0;
+    text-align: left;
+  }
+  .bottom {
+    .base_btn;
+    text-align: center;
+    font-size: ~'36rpx';
+    border-radius: ~'10rpx';
+  }
+}
+
+.fail_wrap {
+  text-align: center;
+  .title {
+    font-size: ~'36rpx';
+    color: @color;
+  }
+  .text {
+    color: @color6;
+    font-size: ~'30rpx';
+    margin: ~'20rpx' 0 ~'30rpx';
+  }
+  .btn_group {
+    border-top: ~'2rpx' solid @color6;
+    font-size: ~'36rpx';
+    display: flex;
+    margin: 0 ~'-60rpx' ~'-60rpx' ~'-60rpx';
+    view {
+      border-right: ~'2rpx' solid @color6;
+      flex: 1;
+      height: ~'100rpx';
+      line-height: ~'100rpx';
+    }
+    button {
+      flex: 1;
+      border: none;
+      height: ~'100rpx';
+      line-height: ~'100rpx';
+      padding: 0;
+      color: @color;
+    }
+  }
+}
+.date_text {
+  color: @color;
+}
+</style>
+<template>
+  <view class="create_order">
+    <view class="picker_view">
+      <view class="picker_wrap">
+        <view class="label">
+          <text>预约套系</text>
+        </view>
+        <view class="item">
+          <view @tap="onAppoint">
+            <block wx:if="{{tx}}">
+              <view class="date_text">
+                <text style="float:right;text-align:right;">{{tx}}</text>
+              </view>
+              <view class="date_text">
+                <text style="float:right;text-align:right;">
+                  价格：<text style="color:#ff6a00">￥{{price}}</text>>
+                </text>
+              </view>
+            </block>
+            <text wx:else>请选择预约套系 ></text>
+          </view>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="picker_wrap">
+        <view class="label">
+          <text>服务日期</text>
+        </view>
+        <view class="item">
+          <view @tap="start_select">
+            <text wx:if="{{appointDate}}" class="date_text">{{appointDate}} ></text>
+            <text wx:else>请选择服务日期 ></text>
+          </view>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="picker_wrap">
+        <view class="label">
+          <text>服务时段</text>
+        </view>
+        <view class="item" @tap="hourSelectTap">
+          <view wx:if="{{appointTime}}" style="color:#242A3A">{{appointTime}} ></view>
+          <view wx:else>请选择服务时段 ></view>
+        </view>
+      </view>
+    </view>
+    <view class="input_view">
+      <input
+        placeholder-class="input_placeholder"
+        maxlength="{{16}}"
+        @input="onNameInput"
+        name="name"
+        placeholder="请输入联系人姓名"
+      />
+    </view>
+    <view class="input_view">
+      <input
+        placeholder-class="input_placeholder"
+        maxlength="{{16}}"
+        @input="onPhoneInput"
+        name="phone"
+        placeholder="请输入联系人电话"
+      />
+    </view>
+    <view class="textarea_view">
+      <textarea
+        placeholder-class="input_placeholder"
+        maxlength="{{500}}"
+        @input="onContentInput"
+        name="remark"
+        placeholder="请输入时间，地点，要求等信息"
+      />
+      <view class="help"></view>
+    </view>
+    <view class="input_view">
+      <button @tap="onCreateHouse" class="pay_active">确认预约</button>
+    </view>
+  </view>
+  <iviewer>
+    <view class="times_modal">
+      <view class="title">自定义播放次数</view>
+      <view class="body">
+        <input focus placeholder="请输入每小时播放次数" @input="onCustomInput" type="number" />
+      </view>
+      <view class="desc">范围：1-{{maxSecond}}次之间</view>
+      <view>
+        <button :class="{'btm_btn': isEnable}" disabled="{{!isEnable}}" @tap="onConfirm">确定</button>
+      </view>
+    </view>
+  </iviewer>
+  <fail showFoot="{{true}}">
+    <view class="fail_wrap">
+      <view class="title">支付失败</view>
+      <view class="text">抱歉，系统没有查询到您的支付信息，如果您已确认支付，请联系客服处理</view>
+      <view class="btn_group">
+        <view @tap="cancelFail">取消</view>
+        <button open-type="contact" plain="{{true}}">联系客服</button>
+      </view>
+    </view>
+  </fail>
+  <!-- <cityselect></cityselect> -->
+  <mapselect :markers.sync="mapMarkers"></mapselect>
+  <hoursselect></hoursselect>
+  <paydrawer :balance.sync="balance" :total.sync="total_money"></paydrawer>
+  <point :datasource.sync="all_store"></point>
+  <selectstart key="start"></selectstart>
+  <selectend key="end"></selectend>
+  <popover>
+    <view>{{help_text}}</view>
+  </popover>
+</template>
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import { SAVELIST } from '../store/types/stores';
+import iviewer from '../components/modal/index';
+import cityselect from '../components/createOrder/city';
+import mapselect from '../components/createOrder/mapSelect';
+import hoursselect from '../components/createOrder/hoursSelect';
+import appoint from '../components/createOrder/appoint';
+import paydrawer from '../components/createOrder/payDrawer';
+import selectdate from '../components/createOrder/selectDate';
+import WxValidate from '../utils/WxValidate';
+import HTTP from '../utils/http';
+import Popover from '../components/popover/index';
+
+// 验证字段的规则
+const rules = {
+  tx: { required: true },
+  price: { required: true },
+  appointDate: { required: true },
+  appointTime: { required: true },
+  name: { required: true },
+  phone: { required: true },
+  remark: { required: false },
+  categoryId: { categoryId: false }
+  /*
+  end_date: { required: true },
+  hour_period: { required: true },
+  hour_times: { required: true, thanZero: true }
+  */
+};
+// 验证字段的提示信息，若不传则调用默认的信息
+const messages = {
+  tx: { required: '请选择预约套系！' },
+  price: { required: '请选择套系价格！' },
+  appointDate: { required: '请选择服务日期！' },
+  appointTime: { required: '请选择服务时段！' },
+  name: { required: '请输入联系人姓名！' },
+  phone: { required: '请输入联系人电话！' },
+  remark: { required: '请输入时间，地点，要求等信息！' },
+  categoryId: { required: '请选择预约套系！' }
+};
+const validate = new WxValidate(rules, messages);
+validate.addMethod(
+  'thanZero',
+  (value, param) => {
+    return value > 0;
+  },
+  '请选择每小时播放次数'
+);
+@connect(
+  {
+    store_arr(state) {
+      return state.stores.store_arr;
+    }
+  },
+  {
+    save_store: SAVELIST
+  }
+)
+export default class CreateOrder extends wepy.page {
+  config = {
+    navigationBarTitleText: '创建预约'
+  };
+  components = {
+    hoursselect,
+    mapselect,
+    cityselect,
+    selectstart: selectdate,
+    selectend: selectdate,
+    point: appoint,
+    paydrawer,
+    iviewer,
+    fail: iviewer,
+    popover: Popover
+  };
+  data = {
+    times: null, // 播放次数radio
+    custom: 0, // 播放次数值
+    storeType: '', // 选择门店类型
+    title: '', // 广告标题
+
+    textLen: 0,
+    len: 0, // 音频长度
+
+    end_date: '', // 结束日期
+    hour_period: [], // 小时时段
+    city_list: [],
+    gap_list: [],
+    store_list: [],
+    all_store: [],
+    mapMarkers: [], // 地图筛选的门店列表
+    store_no_list: [], // 地图选择和指定门店的编号
+    total_money: 0,
+    total_times: 0,
+    help_text: '',
+    balance: {},
+    isCustom: false,
+
+    //
+    tx: '', //套系
+    price: '', //价格
+    appointDate: '', // 开始日期
+    appointTime: null, //时段
+    name: '',
+    phone: '',
+    remark: '', // 文字内容
+    categoryId: ''
+  };
+  computed = {
+    customTimes() {
+      const { isCustom, custom } = this;
+      if (isCustom) {
+        return custom + '次';
+      }
+      return '自定义';
+    },
+    maxSecond() {
+      return Math.floor(3570 / this.len);
+    },
+    isEnable() {
+      return this.custom > 0 && this.custom < Math.floor(3570 / this.len);
+    }
+  };
+  watch = {
+    // 监听门店变化重新计算订单价格
+    store_arr(newValue, oldValue) {
+      if (oldValue.length && oldValue.length !== newValue.length) {
+        const par = this.getStoreParams();
+        const store_no_list = newValue.map(item => item.store_no);
+        this.getStores({ ...par, store_no_list }).then(data => {
+          this.store_list = data.store_list;
+          this.total_money = data.total_money;
+          this.total_times = data.total_times;
+          this.methods.save_store(data.store_list);
+          this.$apply();
+        });
+      }
+    }
+  };
+  methods = {
+    //创建客户
+    onCreateHouse() {
+      this.handleCreateOrder();
+    },
+
+    // 关闭支付失败modal
+    cancelFail() {
+      this.$invoke('fail', 'hideModal');
+    },
+    // 提示文字
+    onHelp(type, e) {
+      let text = 'content';
+      switch (type) {
+        case 'content':
+          text = '只计算中英文字数，不包含标点符号和空格。';
+          break;
+        case 'len':
+          text = '我们将根据3字/秒的标准，对您的文字内容进行音频转化。';
+          break;
+        case 'date':
+          text = '设置广告的投放时间范围，系统将在此时间内播放您的广告。';
+          break;
+        case 'hours':
+          text =
+            '根据已选择的播放日期，设置每天需要播放的具体小时段，系统将在此时段内播放您的广告。';
+          break;
+        case 'times':
+          text =
+            '根据已选择的播放时段，设置每小时需要播放的次数，每小时最大可播放次数=3570s÷广告音频时长';
+          break;
+      }
+      this.help_text = text;
+      this.$invoke('popover', 'onDisplay', e);
+    },
+    start_select() {
+      this.$invoke('selectstart', 'showDrawer');
+    },
+    end_select() {
+      this.$invoke('selectend', 'showDrawer');
+    },
+    // 每小时播放次数change
+    timesChange(value) {
+      if (this.len < 1) return;
+      if (value === 0) {
+        this.$invoke('iviewer', 'showModal');
+      } else {
+        this.isCustom = false;
+        this.balanceTimes(value);
+        this.custom = value;
+        // 修改数据重新计算订单
+        this.updateOrderInfo();
+      }
+      this.times = value;
+    },
+    // 地图选点
+    onMap() {
+      const par = this.getStoreParams();
+      if (!validate.checkForm(par)) {
+        const error = validate.errorList[0];
+        wx.showModal({
+          title: '提示',
+          content: error.msg,
+          showCancel: false
+        });
+        return false;
+      }
+
+      this.$invoke('mapselect', 'showDrawer');
+    },
+    // 区域选点
+    onRegion() {
+      const par = this.getStoreParams();
+      if (!validate.checkForm(par)) {
+        const error = validate.errorList[0];
+        wx.showModal({
+          title: '提示',
+          content: error.msg,
+          showCancel: false
+        });
+        return false;
+      }
+
+      this.$invoke('cityselect', 'showDrawer');
+    },
+    // 指定门店
+    onAppoint() {
+      const par = this.getStoreParams();
+      // if (!validate.checkForm(par)) {
+      //   const error = validate.errorList[0];
+      //   wx.showModal({
+      //     title: '提示',
+      //     content: error.msg,
+      //     showCancel: false
+      //   });
+      //   return false;
+      // }
+      this.$invoke('point', 'showDrawer');
+      this.getStores(par)
+        .then(data => {
+          // this.all_store = data.store_list;
+          console.log('get store', data);
+          this.all_store = data;
+          this.$apply();
+          this.$invoke('point', 'onInit');
+        })
+        .catch(err => {});
+    },
+    hourSelectTap() {
+      this.$invoke('hoursselect', 'showDrawer');
+    },
+    //
+    onNameInput(e) {
+      this.name = e.detail.value;
+    },
+
+    onPhoneInput(e) {
+      this.phone = e.detail.value;
+    },
+    // 输入内容
+    onContentInput(e) {
+      let value = e.detail.value;
+      const reg = /[`~!@#$^&*()=|{}·':;',\\\[\]\.\-%<>\/?~！@#￥……&*（）——|_+{}【】 '；：""'。，、？]/g;
+      let filter_value = value.replace(reg, '');
+      const str_len = filter_value.length;
+      this.remark = value;
+      this.textLen = str_len;
+      this.len = Math.ceil(str_len / 3);
+      // 修改数据重新计算订单
+      // this.updateOrderInfo();
+    },
+    onDelHour(hour) {
+      const newHour = this.hour_period.filter(item => item !== hour);
+      this.hour_period = newHour;
+      this.$invoke('hoursselect', 'updateChecked', newHour);
+      // 修改数据重新计算订单
+      this.updateOrderInfo();
+    },
+    // 自定义次数
+    onCustomInput(e) {
+      this.custom = Number(e.detail.value);
+    },
+    onConfirm() {
+      this.isCustom = true;
+      this.balanceTimes(this.custom);
+      this.$invoke('iviewer', 'hideModal');
+      // 修改数据重新计算订单
+      this.updateOrderInfo();
+    },
+    // 提交订单
+    onPay() {
+      this.createOrder(true)
+        .then(res => {
+          if (res.success) {
+            // this.$navigate({ url: '/pages/orderSuccess' });
+            wx.redirectTo({ url: '/pages/orderSuccess' });
+          } else {
+            // 余额不足
+            if (res.code === '502') {
+              this.balance = res.data;
+              this.$apply();
+              this.$invoke('paydrawer', 'showDrawer');
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: res.msg,
+                showCancel: false
+              });
+            }
+          }
+        })
+        .catch(err => {});
+    }
+  };
+
+  // 创建订单
+  createOrder = (loading = true) => {
+    const {
+      tx, //套系
+      price, //价格
+      appointDate,
+      appointTime, //时段
+      name,
+      phone,
+      categoryId,
+      remark // 文字内容
+    } = this;
+
+    if (!validate.checkForm(this)) {
+      const error = validate.errorList[0];
+      wx.showModal({
+        title: '提示',
+        content: error.msg,
+        showCancel: false
+      });
+      return false;
+    }
+
+    return HTTP.post({
+      url: '/photo/add-photo-booking',
+      loading,
+      params: {
+        tx, //套系
+        price, //价格
+        appointDate,
+        appointTime, //时段
+        name,
+        categoryId,
+        phone,
+        remark // 文字内容
+        // title,
+        // content,
+        // len,
+        // appointDate,
+        // end_date,
+        // hour_period: hour_period.join(','),
+        // gap_list,
+        // hour_times: custom,
+        // hour_type: 1,
+        // city_list,
+        // real_pay_money: total_money,
+        // store_list: temp
+      }
+    })
+      .then(res => {
+        return Promise.resolve(res);
+      })
+      .catch(err => {
+        return Promise.reject();
+      });
+  };
+  // 均衡次数
+  balanceTimes = (total = 0) => {
+    const len = this.len;
+    let gap_list = [];
+    let arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let i = 0;
+    while (total > 0) {
+      let maxS = i === 0 || i === 11 ? 285 : 300;
+      if (len * arr[i] + len <= maxS) {
+        arr[i] = arr[i] + 1;
+        total--;
+      }
+      i++;
+      if (i === 12) {
+        i = 0;
+      }
+    }
+    gap_list = arr
+      .map((item, i) => ({ cut: i * 5, times: item }))
+      .filter(e => e.times > 0);
+    this.gap_list = gap_list;
+  };
+  events = {
+    // 日期选择完成
+    dateDone: (date, key) => {
+      if (key === 'start') {
+        this.appointDate = date;
+      }
+      if (key === 'end') {
+        this.end_date = date;
+      }
+      // 修改数据重新计算订单
+      this.updateOrderInfo();
+    },
+    // 地图选择完成
+    mapDone: () => {
+      const store_no_list = this.mapMarkers.map(item => item.no);
+      const par = this.getStoreParams('map');
+      this.store_no_list = store_no_list;
+      if (store_no_list.length === 0) return;
+      this.storeType = 'map';
+      this.getStores({ ...par, store_no_list })
+        .then(data => {
+          if (data.store_list.length === 0) {
+            wx.showToast({
+              title: '未匹配到门店',
+              icon: 'none'
+            });
+            return;
+          }
+          this.store_list = data.store_list;
+          this.total_money = data.total_money;
+          this.total_times = data.total_times;
+          this.methods.save_store(data.store_list);
+          this.$apply();
+        })
+        .catch(err => {});
+    },
+    // 按区域选择
+    onRegionDone: city_list => {
+      this.storeType = 'region';
+      this.city_list = city_list;
+      const par = this.getStoreParams('region');
+      this.getStores(par)
+        .then(data => {
+          if (data.store_list.length === 0) {
+            wx.showToast({
+              title: '未匹配到门店',
+              icon: 'none'
+            });
+            return;
+          }
+          this.store_list = data.store_list;
+          this.total_money = data.total_money;
+          this.total_times = data.total_times;
+          this.methods.save_store(data.store_list);
+          this.$apply();
+        })
+        .catch(err => {});
+    },
+    // 指定门店完成
+    onAppointDone: store_no_list => {
+      console.log('child tx selected', store_no_list);
+      // this.store_list = data.store_list;
+      // this.methods.save_store(data.store_list);
+
+      if (store_no_list.length > 0) {
+        this.store_no_list = store_no_list;
+        this.tx = store_no_list[0].name;
+        this.price = store_no_list[0].price;
+        this.categoryId = store_no_list[0].id;
+      }
+
+      this.$apply();
+      // this.storeType = 'appoint';
+      // const par = this.getStoreParams('appoint');
+      // this.store_no_list = store_no_list;
+      // this.getStores({ ...par, store_no_list }).then(data => {
+      //   if(data.store_list.length === 0) {
+      //     wx.showToast({
+      //       title: '未匹配到门店',
+      //       icon: 'none'
+      //     });
+      //     return;
+      //   }
+      //   this.store_list = data.store_list;
+      //   this.total_money = data.total_money;
+      //   this.total_times = data.total_times;
+      //   this.methods.save_store(data.store_list);
+      //   this.$apply();
+      // }).catch(err => {
+
+      // });
+    },
+    // 完成时段选择
+    onHourSelect: values => {
+      this.appointTime = values;
+
+      console.log('this.appointTime', this.appointTime);
+      // 修改数据重新计算订单
+      // this.updateOrderInfo();
+    },
+    // 地图范围change
+    mapChange: payload => {
+      const par = this.getStoreParams('map');
+      this.getStores({ ...par, ...payload })
+        .then(data => {
+          const markers = data.store_list.map(item => {
+            return {
+              id: item.store_id,
+              iconPath: '../../images/local_r.png',
+              latitude: item.latitude,
+              longitude: item.longitude,
+              width: 20,
+              height: 24,
+              no: item.store_no
+            };
+          });
+          this.mapMarkers = markers;
+          this.$apply();
+        })
+        .catch(err => {});
+    },
+
+    // 微信充值成功轮询创建订单
+    checkPaymentDone: () => {
+      wx.showToast({
+        icon: 'loading',
+        mask: true,
+        duration: 20000,
+        title: '订单创建中...'
+      });
+      let i = 5;
+      let done = true;
+      const timeId = setInterval(() => {
+        if (!done) return;
+        done = false;
+        this.createOrder(false)
+          .then(res => {
+            if (res.success) {
+              wx.hideToast();
+              clearInterval(timeId);
+              // this.$navigate({ url: '/pages/orderSuccess' });
+              wx.redirectTo({ url: '/pages/orderSuccess' });
+            } else {
+              if (i === 0) {
+                wx.hideToast();
+                clearInterval(timeId);
+                this.$invoke('fail', 'showModal');
+              }
+            }
+            done = true;
+            i--;
+          })
+          .catch(() => {
+            done = true;
+            i--;
+          });
+      }, 1000);
+    }
+  };
+  // 组装请求参数
+  getStoreParams = type => {
+    /*
+      const { title, content, len, appointDate, end_date, hour_period, gap_list, custom, city_list } = this;
+      const common = {
+        title,
+        content,
+        len,
+        appointDate,
+        end_date,
+        hour_period: hour_period.join(','),
+        gap_list,
+        hour_times: custom,
+        hour_type: 1
+      };
+      if (type === 'map') {
+        return common;
+      } else if (type === 'region') {
+        return { ...common, city_list };
+      }
+      return common;
+      */
+
+    const common = {
+      current: 1,
+      pageSize: 1000
+    };
+
+    return common;
+  };
+  // 匹配门店request
+  getStores = (params = {}) => {
+    return HTTP.post({
+      url: '/photo/list-photo-category-yuyue',
+      params
+    })
+      .then(res => {
+        console.log(res);
+        if (res.success) {
+          return Promise.resolve(res.data);
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.msg,
+            showCancel: false
+          });
+          return Promise.reject();
+        }
+      })
+      .catch(err => {
+        return Promise.reject();
+      });
+  };
+  // 更新订单信息
+  updateOrderInfo = () => {
+    const par = this.getStoreParams();
+    const type = this.storeType;
+    const { store_no_list, city_list } = this;
+    if (!validate.checkForm(par)) {
+      return false;
+    }
+    let payload = {};
+    if (type === 'map' || type === 'appoint') {
+      payload = { ...par, store_no_list };
+    } else {
+      payload = { ...par, city_list };
+    }
+    if (store_no_list.length > 0 || city_list.length > 0) {
+      this.getStores(payload).then(data => {
+        this.store_list = data.store_list;
+        this.total_money = data.total_money;
+        this.total_times = data.total_times;
+        this.methods.save_store(data.store_list);
+        this.$apply();
+      });
+    }
+  };
+
+  onLoad() {
+    // 定位授权
+    /*wepy.getLocation({
+        type: 'gcj02',
+        success: (res) => {
+          this.latitude = res.latitude;
+          this.longitude = res.longitude;
+        },
+        fail: () => {
+          wx.redirectTo({ url: 'local' });
+        }
+      });*/
+  }
+
+  handleCreateOrder = () => {
+    this.createOrder(true)
+      .then(res => {
+        if (res.success) {
+          /*
+          wx.requestSubscribeMessage({
+            tmplIds: ['mb3V-RxG5v1Vxs7eNPjmOXMWpzCjmZtuQe7L3nN3_gg'],
+            success(res) {
+              wx.redirectTo({ url: '/pages/orderSuccess' });
+            },
+            fail(fail) {
+              wx.redirectTo({ url: '/pages/orderSuccess' });
+            }
+          });
+          */
+
+          wx.showModal({
+            title: '提示',
+            content: '预约成功！',
+            showCancel: false,
+            complete: res => {
+              wx.reLaunch({ url: '/pages/yuyuemain' });
+            }
+          });
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.msg,
+            showCancel: false,
+            complete: res => {
+              // wx.reLaunch({ url: '/pages/yuyuemain' });
+            }
+          });
+        }
+      })
+      .catch(err => {
+        wx.showModal({
+          title: '提示',
+          content: '预约失败！',
+          showCancel: false
+        });
+      });
+  };
+}
+</script>

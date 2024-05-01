@@ -1,0 +1,233 @@
+<style lang="less" scoped>
+@import '../../common/index';
+
+.wrap {
+  height: ~'800rpx';
+}
+
+.city_item {
+  text-align: center;
+  font-size: ~'28rpx';
+  color: @color6;
+  padding: ~'40rpx' 0;
+  image {
+    margin-right: ~'10rpx';
+    width: ~'22rpx';
+    height: ~'26rpx';
+  }
+  .checked {
+    color: @color;
+  }
+}
+
+.province,
+.city {
+  border-right: ~'2rpx' solid #e4e4e4;
+}
+
+.city_wrap {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  border-top: ~'2rpx' solid #e4e4e4;
+  background: #ffffff;
+  scroll-view {
+    flex: 1;
+    box-sizing: border-box;
+  }
+}
+</style>
+<template>
+
+  <drawer :open.sync="open">
+    <view class="wrap">
+      <view class="drawer_header">
+        <text @tap="hideDrawer">取消</text>
+        <text>按区域选择</text>
+        <text @tap="onDone">完成</text>
+      </view>
+      <view class="city_wrap">
+        <scroll-view scroll-y class="province">
+          <view class="city_item" wx:for="{{province}}" wx:key="index">
+            <image wx:if="{{item.id === currentProvince.id}}" src="../../images/local_black.png"/>
+            <text :class="{'checked': currentProvince.id === item.id}" @tap="provinceChange({{item}})">{{item.name}}
+            </text>
+          </view>
+        </scroll-view>
+        <scroll-view scroll-y class="city">
+          <view class="city_item" wx:for="{{city}}" wx:key="index">
+            <image wx:if="{{item.id === currentCity.id}}" src="../../images/local_black.png"/>
+            <text :class="{'checked': currentCity.id === item.id}" @tap="cityChange({{item}})">{{item.name}}</text>
+          </view>
+        </scroll-view>
+        <scroll-view scroll-y>
+          <!--<view class="city_item">
+            <text>全部</text>
+          </view>-->
+          <view class="city_item" wx:for="{{district}}" wx:key="index">
+            <image wx:if="{{item.checked}}" src="../../images/local_black.png"/>
+            <text :class="{'checked': item.checked}" @tap="districtChange({{item}})">{{item.name}}</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </drawer>
+</template>
+<script>
+import wepy from 'wepy';
+import drawer from '../drawer';
+import HTTP from '../../utils/http';
+
+export default class CitySelect extends wepy.component {
+  components = {
+    drawer
+  };
+  data = {
+    open: false,
+    province: [], // 省List
+    city: [], // 市list
+    district: [], // 区县list
+    districtChecked: [], //
+    currentProvince: {},
+    currentCity: {}
+  };
+  computed = {};
+  events = {
+    onHide() {
+      this.open = false;
+    }
+  };
+  methods = {
+    hideDrawer() {
+      this.open = false;
+    },
+    showDrawer() {
+      this.open = true;
+    },
+    provinceChange(row) {
+      const { id, childList } = row;
+      this.city = childList;
+      this.district = [];
+      this.currentProvince = row;
+    },
+    cityChange(row) {
+      const { id, childList } = row;
+      this.district = childList;
+      this.currentCity = row;
+      this.updateChecked(this.districtChecked, childList);
+    },
+    districtChange(row) {
+      const { id } = row;
+      const s_checked = [...this.districtChecked];
+      const index = s_checked.findIndex(item => item.id === id);
+      if (index > -1) {
+        s_checked.splice(index, 1);
+      } else {
+        s_checked.push({
+          ...row,
+          p_id: this.currentProvince.id,
+          p_name: this.currentProvince.name,
+          c_id: this.currentCity.id,
+          c_name: this.currentCity.name
+        });
+      }
+      // 更新选中状态
+      this.updateChecked(s_checked, this.district);
+    },
+    onDone() {
+      this.open = false;
+      const cityList = this.districtChecked.map(item => {
+        return {
+          province: item.p_name,
+          province_no: item.p_id,
+          city: item.c_name,
+          city_no: item.c_id,
+          district: item.name,
+          district_no: item.id
+        };
+      });
+      if (cityList.length === 0) return;
+      this.$emit('onRegionDone', cityList);
+    }
+  };
+  // 更新选中状态
+  updateChecked = (checkedList, currentList) => {
+    const tempDistrict = [...currentList];
+    const s_checked = [...checkedList];
+    tempDistrict.forEach(item => {
+      item.checked = false;
+      s_checked.forEach(e => {
+        if (e.id === item.id) {
+          item.checked = true;
+        }
+      });
+    });
+    this.districtChecked = s_checked;
+    this.district = tempDistrict;
+  };
+  // 拉取省市区数据
+  getCityData = () => {
+    HTTP.get({
+      url: '/v4/basics/city-level'
+    })
+      .then(res => {
+        if (res.success) {
+          const defaultCity = res['data'][0]['childList'];
+          const defaultDistrict = defaultCity[0]['childList'];
+          this.currentProvince = res['data'][0];
+          this.currentCity = defaultCity[0];
+          this.province = res.data.map(item => ({
+            name: item.name,
+            id: item.id,
+            childList: item.childList,
+            checked: false
+          }));
+          this.city = defaultCity.map(item => ({
+            name: item.name,
+            id: item.id,
+            childList: item.childList,
+            checked: false
+          }));
+          this.district = defaultDistrict.map(item => ({
+            name: item.name,
+            id: item.id,
+            checked: false
+          }));
+          this.$apply();
+        }
+      })
+      .catch(err => {});
+  };
+
+  onLoad() {
+
+    /*
+    // this.getCityData();
+    const city_data = wepy.$instance.globalData.city_data;
+    const defaultCity = city_data[0]['childList'];
+    const defaultDistrict = defaultCity[0]['childList'];
+    this.currentProvince = city_data[0];
+    this.currentCity = defaultCity[0];
+    this.province = city_data.map(item => ({
+      name: item.name,
+      id: item.id,
+      childList: item.childList,
+      checked: false
+    }));
+    this.city = defaultCity.map(item => ({
+      name: item.name,
+      id: item.id,
+      childList: item.childList,
+      checked: false
+    }));
+    this.district = defaultDistrict.map(item => ({
+      name: item.name,
+      id: item.id,
+      checked: false
+    }));
+    this.$apply();
+
+    */
+  }
+}
+</script>

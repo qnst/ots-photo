@@ -1,0 +1,41 @@
+<style lang="less">
+@import '../common/index';
+.local {
+  min-height: 100vh;
+  background: #ffffff;
+  text-align: center;
+  > image {
+    width: ~'320rpx';
+    height: ~'320rpx';
+    margin-top: ~'144rpx';
+  }
+  > view {
+    font-size: ~'32rpx';
+    color: @color;
+    margin: ~'40rpx' 0;
+  }
+  > button {
+    background: @color;
+    color: #ffffff;
+    height: ~'94rpx';
+    width: ~'400rpx';
+    font-size: ~'36rpx';
+  }
+}
+</style>
+<template>
+  <view class="local">
+    <image src="../images/local.png"></image>
+    <view><text>获取定位失败，请先打开定位权限</text></view>
+    <button open-type="openSetting">打开定位权限</button>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class Local extends wepy.page {
+  config = {
+    navigationBarTitleText: '定位',
+  };
+}
+</script>

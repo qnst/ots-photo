@@ -1,0 +1,445 @@
+<style lang="less">
+@import "../common/index";
+
+.banner {
+  width: 100%;
+  display: block;
+  height: ~'400rpx';
+}
+
+
+
+.top {
+  .base_card;
+  animation: slideInUp .0s ease-out forwards;
+  opacity: 0;
+
+  >.title {
+    font-size: ~'36rpx';
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: ~'40rpx';
+  }
+
+  >.title1 {
+    font-size: ~'36rpx';
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30rpx;
+  }
+
+}
+
+.btn {
+  width: ~'400rpx';
+  font-size: ~'36rpx';
+  height: ~'94rpx';
+  background-color: #242A3A;
+  color: #ffffff;
+  margin: ~'40rpx' auto;
+}
+
+.step {
+  font-size: ~'28rpx';
+  color: rgba(#242A3A, .6);
+  align-items: center;
+
+  image {
+    width: ~'22rpx';
+    height: ~'12rpx';
+  }
+}
+
+.content {
+  padding: ~'20rpx';
+}
+
+.rule {
+  text-align: center;
+  font-size: ~'30rpx';
+  color: rgba(#242A3A, .6);
+
+  navigator {
+    display: inline-block;
+  }
+}
+
+.flex-wrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.middle {
+  .base_card;
+  opacity: 0;
+  animation: slideInUp .0s ease-out .3s forwards;
+  margin: ~'20rpx' 0;
+
+  .title {
+    display: flex;
+    align-items: center;
+    margin-bottom: ~'35rpx';
+
+    .left {
+      font-size: ~'32rpx';
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .right {
+      font-size: ~'24rpx';
+      color: rgba(#242A3A, .6);
+    }
+  }
+}
+
+.banner_wrap {
+  position: relative;
+} 
+
+.btn_hover {
+  background: @color6;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes floatAni {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, 23%, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+.body {
+  background: #F3F3F3;
+  min-height: 100vh;
+}
+
+.content_body {
+  padding: ~'15rpx';
+  line-height: 1;
+}
+
+
+.clsswip {
+  padding: ~'15rpx';
+}
+
+.swiper-item {
+  width: 100%;
+  // background: red;
+  border-radius: ~'10rpx';
+
+  image {
+    width: ~'100%';
+    // height: ~'12rpx';
+    border-radius: ~'10rpx';
+    height: ~'100%';
+  }
+}
+
+.t3 {
+  width: 100%;
+  height: 140px;
+}
+
+.t31 {
+  width: 33%;
+  height: 120px;
+}
+
+.kfs {
+  text-align: center;
+  margin-top:~'10rpx';
+  font-size: ~'32rpx';
+} 
+
+.text1 {
+  line-height: ~'40rpx';
+}
+</style>
+<template>
+  <view class="body">
+
+    <view class="clsswip">
+      <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}"
+        duration="{{duration}}">
+        <block wx:for="{{background}}" wx:key="*this">
+          <swiper-item class="swiper-item">
+            <image src="{{ item }}" mode="scaleToFill" />
+            <!-- <view class="swiper-item {{item}}"></view> -->
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <!-- <view class="banner_wrap">
+      <image class="banner" src="../images/home_banner.jpg"></image>
+      <image class="bubble1" src="../images/bubble1.png"></image>
+      <image class="bubble2" src="../images/bubble2.png"></image>
+      <image class="bubble3" src="../images/bubble3.png"></image>
+      <image class="bubble4" src="../images/bubble4.png"></image>
+      <image class="bubble5" src="../images/bubble5.png"></image>
+      <image class="bubble6" src="../images/bubble6.png"></image>
+    </view> -->
+
+    <view class="content_body">
+      <view class="top">
+        <view class="title1">
+          <text>儿童摄影</text>
+        </view>
+        <view class="step flex-wrp">
+          <!-- <text>客服</text>
+          <image src="../images/arrow_r.png"></image>
+          <text>流程</text>
+          <image src="../images/arrow_r.png"></image>
+          <text>关于我们</text> -->
+          <text class="text1">所有主题，提供服装，也可以自带服装！100%保证客片效果，多种套餐，多种主题选择！</text>
+        </view>
+        <!-- <button hover-class="btn_hover" class="btn" @tap="createOrder">开始创建广告</button> -->
+        <!-- <view class="rule">
+          <navigator url="standard">
+            <text>广告内容规范 >></text>
+          </navigator>
+        </view> -->
+      </view>
+
+      <block wx:for="{{category}}" wx:key="*this">
+        <view class="middle">
+          <view class="title">
+            <text class="left">{{ item.name }}</text>
+            <navigator hover-stop-propagation="{{true}}" url="/pages/maindetail?id={{item.id}}">
+              <text class="right">查看全部</text>
+            </navigator>
+          </view>
+          <!-- <subcatg :dataSource.sync={{item.t1}}></subcatg> -->
+          <!-- <subcatg :ds="item" :tt2="item.title" wx:if="{{ item.t1.length>0 }}"></subcatg> -->
+          <navigator hover-stop-propagation="{{true}}" url="/pages/maindetail?id={{item.id}}">
+            <grid-view type="aligned" cross-axis-count="3">
+              <block wx:for="{{ item.sub }}">
+                <view style="margin-right:10rpx">
+                  <image mode="scaleToFill" src="{{ item.images[0].path }}"
+                    style="width: 100%;height: 120px;border-radius: 10rpx;"></image>
+                  <view class="kfs">
+                    <text>{{ item.name }}</text>
+                  </view>
+                </view>
+              </block>
+            </grid-view>
+          </navigator>
+        </view>
+      </block>
+
+
+
+      <!-- <bottomList :list.sync="underwayList"></bottomList> -->
+    </view>
+  </view>
+
+</template>
+<script>
+import wepy from 'wepy';
+import Counter from '../components/home/counter';
+import BottomList from '../components/home/bottomList';
+import SubCatg from '../components/home/subcatg';
+import HTTP from '../utils/http';
+
+export default class Main extends wepy.page {
+  config = {
+    navigationBarTitleText: '儿童摄影'
+  };
+  components = {
+    counter: Counter,
+    bottomList: BottomList,
+    subcatg: SubCatg,
+  };
+  data = {
+    count: {},
+    underwayList: [],
+    indicatorDots: true,
+    autoplay: true,
+    interval: 5000,
+    duration: 500,
+    background: [],//轮播图，后台获取数据并拼接
+    category: [],
+    //   category: [{
+    //     name: '本周值得买', sub: [{
+    //       name: '清新2',
+    //       path: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+    //     },
+    //     {
+    //       title: '清新3',
+    //       sub: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+    //     },
+    //     {
+    //       title: '清新5',
+    //       sub: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg'
+    //     }]
+    //   },
+    //   { title: '会员特权福利', t1: [{ title: '清新', sub: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg' }] },
+    //   { title: '会员超值换购', t1: [{ title: '清新', sub: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg' }] },
+    //   { title: '连续7天抽好礼', t1: [{ title: '清新', sub: 'http://localhost:5002/img/mng/top/2024032817344768694895881.jpg' }] }]
+    // };
+  };
+  methods = {
+    createOrder: () => {
+      this.checkScope().then(() => {
+        this.$navigate({ url: '/pages/createOrder' });
+      }).catch(() => {
+        this.$navigate({ url: '/pages/auth' });
+      });
+    }
+  };
+  getStatusCount = () => {
+    HTTP.get('/v4/advert/put/order-status-count').then(res => {
+      if (res.success) {
+        this.count = res.data;
+        this.$apply();
+      }
+    }).catch(err => {
+    });
+  };
+  // 投放中列表
+  getUnderway = () => {
+    HTTP.get({
+      url: '/v4/advert/put/playing-order-list'
+    }).then(res => {
+      if (res.success) {
+        this.underwayList = res.data.map(item => {
+          return {
+            id: item.order.id,
+            title: item.order.title,
+            len: item.order.len,
+            url: item.order.advert_url,
+            useful_times: item.useful_times,
+            useless_times: item.useless_times,
+            total_consume: item.total_consume,
+            total_surplus: item.total_surplus,
+            isPlay: false
+          };
+        });
+
+      }
+    }).catch(err => {
+
+    });
+  };
+  checkScope = () => {
+    return new Promise((resolve, reject) => {
+      wx.getStorage({
+        key: 'skey',
+        success: (res) => {
+          resolve();
+        },
+        fail: () => {
+          reject();
+        }
+      });
+    });
+  };
+
+  //获取轮播图
+  getTopImg = () => {
+    HTTP.post({
+      url: '/photo/list-photo-img-api',
+      params: { current: 1, pageSize: 5, data: { type: 1 } }
+    }).then(res => {
+      console.log(res)
+      if (res.success) {
+        this.background = res.data;
+        this.$apply();
+        console.log(this.background)
+        // this.background = res.data.map(item => {
+        //   return {
+        //     id: item.order.id,
+        //     title: item.order.title,
+        //     len: item.order.len,
+        //     url: item.order.advert_url,
+        //     useful_times: item.useful_times,
+        //     useless_times: item.useless_times,
+        //     total_consume: item.total_consume,
+        //     total_surplus: item.total_surplus,
+        //     isPlay: false
+        //   };
+        // });
+
+      }
+    }).catch(err => { });
+  };
+
+  getCategory = () => {
+    HTTP.post({
+      url: '/photo/list-photo-category-api',
+      params: { current: 1, pageSize: 10000 }
+    }).then(res => {
+      console.log(res)
+      this.category = res;
+      this.$apply();
+      console.log(this.category)
+      // if (res.success) {
+
+      //   // this.background = res.data.map(item => {
+      //   //   return {
+      //   //     id: item.order.id,
+      //   //     title: item.order.title,
+      //   //     len: item.order.len,
+      //   //     url: item.order.advert_url,
+      //   //     useful_times: item.useful_times,
+      //   //     useless_times: item.useless_times,
+      //   //     total_consume: item.total_consume,
+      //   //     total_surplus: item.total_surplus,
+      //   //     isPlay: false
+      //   //   };
+      //   // });
+
+      // }
+    }).catch(err => { });
+  };
+
+
+  onShow() {
+    // this.checkScope().then(() => {
+    //   this.getStatusCount();
+    //   this.getUnderway();
+    // }).catch(() => {
+
+    // });
+
+
+    // console.log('main page on show', this.background);
+
+
+  }
+
+  onLoad() {
+    /*wepy.getSetting({
+      success: (res) => {
+        console.log(res.authSetting['scope.userInfo']);
+        this.isScope = res.authSetting['scope.userInfo'];
+      }
+    });*/
+
+    this.getTopImg();
+    this.getCategory();
+  }
+}
+</script>
